@@ -1,61 +1,81 @@
 import { Link } from "expo-router";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import React from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Home() {
-  const contentItems = [1, 2, 3, 4, 5];
-
+export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Página Inicial</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Bem-vindo à CapiTech</Text>
 
-      <FlatList
-        data={contentItems}
-        keyExtractor={(item) => item.toString()}
-        renderItem={({ item }) => (
-          <Link href={`/content/${item}`} style={styles.link}>
-            Ir para Conteúdo {item}
-          </Link>
-        )}
-        style={styles.list}
-      />
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Serviços</Text>
+            <Text style={styles.cardContent}>
+              Confira nossos serviços e soluções tecnológicas
+            </Text>
+          </View>
 
-      <Link href="/content" style={styles.mainLink}>
-        Ver página de conteúdo geral
-      </Link>
-    </View>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Notícias</Text>
+            <Text style={styles.cardContent}>
+              Fique por dentro das últimas novidades
+            </Text>
+          </View>
+
+          <View style={styles.card}>
+            <Link href={"/contact"} style={styles.cardTitle}>Contato</Link>
+            <Text style={styles.cardContent}>
+              Entre em contato com nossa equipe
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#F5F5F5",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    padding: 20,
     alignItems: "center",
-    paddingTop: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    color: "#2F4172",
     marginBottom: 20,
+    marginTop: 10,
   },
-  list: {
+  card: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    marginVertical: 10,
     width: "100%",
-    paddingHorizontal: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  link: {
-    fontSize: 16,
-    color: "#0000ff",
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 5,
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#2F4172",
+    marginBottom: 10,
   },
-  mainLink: {
+  cardContent: {
     fontSize: 16,
-    color: "#ffffff",
-    backgroundColor: "#007bff",
-    padding: 15,
-    marginVertical: 20,
-    borderRadius: 5,
+    color: "#555",
   },
 });
