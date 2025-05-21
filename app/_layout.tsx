@@ -13,17 +13,19 @@ export default function RootLayout() {
         </TouchableOpacity>
 
         <View style={styles.centerContainer}>
-          <Text style={styles.text}>capi</Text>
           <Link href="/" asChild>
-            <TouchableOpacity>
+            <TouchableOpacity
+              style={{ flexDirection: "row", alignItems: "center" }}
+            >
+              <Text style={styles.text}>capi</Text>
               <Image
                 source={require("../assets/capivara.png")}
                 style={styles.logo}
                 resizeMode="contain"
               />
+              <Text style={styles.text}>tech</Text>
             </TouchableOpacity>
           </Link>
-          <Text style={styles.text}>tech</Text>
         </View>
 
         <View style={styles.spacer} />
