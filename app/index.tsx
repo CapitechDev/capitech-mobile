@@ -18,9 +18,9 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>Notícias</Text>
+            <Link href={"/notice"} style={styles.cardTitle}>Notícias</Link>
             <Text style={styles.cardContent}>
-              Fique por dentro das últimas novidades
+              Fique por dentro das últimas novidades do mundo da tecnologia
             </Text>
           </View>
 
