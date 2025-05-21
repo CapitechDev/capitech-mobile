@@ -36,6 +36,13 @@ export default function HomeScreen() {
               Fique por dentro do vestibular da Fatec
             </Text>
           </View>
+
+          <View style={styles.card}>
+            <Link href={"/about"} style={styles.cardTitle}>Sobre</Link>
+            <Text style={styles.cardContent}>
+              Conheça mais sobre o projeto
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
