@@ -18,9 +18,9 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>Notícias</Text>
+            <Link href={"/notice"} style={styles.cardTitle}>Notícias</Link>
             <Text style={styles.cardContent}>
-              Fique por dentro das últimas novidades
+              Fique por dentro das últimas novidades do mundo da tecnologia
             </Text>
           </View>
 
@@ -28,6 +28,19 @@ export default function HomeScreen() {
             <Link href={"/contact"} style={styles.cardTitle}>Contato</Link>
             <Text style={styles.cardContent}>
               Entre em contato com nossa equipe
+            </Text>
+          </View>
+          <View style={styles.card}>
+            <Link href={"/vestibular"} style={styles.cardTitle}>Vestibular</Link>
+            <Text style={styles.cardContent}>
+              Fique por dentro do vestibular da Fatec
+            </Text>
+          </View>
+
+          <View style={styles.card}>
+            <Link href={"/about"} style={styles.cardTitle}>Sobre</Link>
+            <Text style={styles.cardContent}>
+              Conheça mais sobre o projeto
             </Text>
           </View>
         </View>

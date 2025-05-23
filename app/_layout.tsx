@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { Slot } from "expo-router";
+import { Link, Slot } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,13 +13,19 @@ export default function RootLayout() {
         </TouchableOpacity>
 
         <View style={styles.centerContainer}>
-          <Text style={styles.text}>capi</Text>
-          <Image
-            source={require("../assets/capivara.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          <Text style={styles.text}>tech</Text>
+          <Link href="/" asChild>
+            <TouchableOpacity
+              style={{ flexDirection: "row", alignItems: "center" }}
+            >
+              <Text style={styles.text}>capi</Text>
+              <Image
+                source={require("../assets/capivara.png")}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+              <Text style={styles.text}>tech</Text>
+            </TouchableOpacity>
+          </Link>
         </View>
 
         <View style={styles.spacer} />
