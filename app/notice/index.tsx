@@ -1,18 +1,70 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
-  Linking,
+  ScrollView, ActivityIndicator
 } from "react-native";
+import { newsApi } from "../../services/newsApi";
+import { router } from "expo-router";
+import { Article, NewsArticle } from "../../types/Articles";
 
 export default function Notice() {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  const getNews = async (pageNumber: number) => {
+    const response = await newsApi.get<NewsArticle>("/everything", {
+      params: {
+        q: "programação AND desenvolvimento de software",
+        language: "pt",
+        sortBy: "publishedAt",
+        pageSize: 10,
+        page: pageNumber,
+        apiKey: process.env.EXPO_PUBLIC_NEWS_API_KEY,
+      },
+    });
+
+    return response.data;
+  };
+
+  useEffect(() => {
+    console.log({page})
+
+    const fetchNews = async () => {
+      if (loading || !hasMore) return;
+
+      setLoading(true);
+      try {
+        const data = await getNews(page);
+        setArticles((prev) => [...prev, ...data.articles]);
+        setHasMore(data.articles.length > 0);
+      } catch (error) {
+        console.error("Erro ao buscar notícias:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, [page]);
+
+  const handleGetMoreNews = () => {
+    if (!loading && hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      scrollEventThrottle={400}
+    >
       <View style={styles.header}>
-        <Text style={styles.headerText}>Noticias</Text>
+        <Text style={styles.headerText}>Notícias</Text>
       </View>
 
       <View style={styles.containerform}>
@@ -20,17 +72,52 @@ export default function Notice() {
           As últimas novidades do Capitech e do mundo
         </Text>
 
-        <TouchableOpacity
-          onPress={() => Linking.openURL("https://docs.expo.dev/")}
-          activeOpacity={0.8}
-        >
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Nova versão do expo</Text>
-            <Text style={styles.cardContent}>
-              Confira nossos serviços e soluções tecnológicas
-            </Text>
+        {articles.map((article, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => {
+              router.push({
+                pathname: "/notice/details",
+                params: {
+                  article: JSON.stringify(article),
+                },
+              })
+            }}
+            activeOpacity={0.8}
+          >
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>{article.title}</Text>
+              <Text style={styles.cardContent}>{article.description}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+
+        {loading && (
+          <ActivityIndicator
+            size="large"
+            color="#2F4172"
+            style={{ marginVertical: 20 }}
+          />
+        )}
+
+        {!hasMore && (
+          <Text
+            style={{ textAlign: "center", color: "#999", marginBottom: 20 }}
+          >
+            Você chegou ao fim das notícias.
+          </Text>
+        )}
+
+        {!loading && hasMore && (
+          <View style={styles.buttonView}>
+            <TouchableOpacity
+            style={[styles.button, styles.blueButton]}
+            onPress={handleGetMoreNews}
+          >
+            <Text style={styles.buttonText}>Carregar mais itens</Text>
+          </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );
@@ -65,44 +152,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-  input: {
-    backgroundColor: "#f0f0f0",
-    borderColor: "#999",
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 12,
-  },
-  textareaContainer: {
-    flex: 1,
-    marginBottom: 50,
-  },
-  textarea: {
-    flex: 1,
-  },
-  button: {
-    backgroundColor: "#0099cc",
-    paddingVertical: 12,
-    borderRadius: 20,
-    alignItems: "center",
-    marginBottom: 50,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  success: {
-    color: "green",
-    textAlign: "center",
-    marginTop: 10,
-  },
-  error: {
-    color: "red",
-    textAlign: "center",
-    marginTop: 10,
-  },
   card: {
     backgroundColor: "white",
     borderRadius: 10,
@@ -124,5 +173,22 @@ const styles = StyleSheet.create({
   cardContent: {
     fontSize: 16,
     color: "#555",
+  },
+  buttonView: { width: "100%", alignItems: "center", marginBottom: 20 },
+  button: {
+    width: "90%",
+    paddingVertical: 14,
+    borderRadius: 14,
+    marginTop: 12,
+    alignItems: "center",
+  },
+  blueButton: {
+    backgroundColor: "#2563EB",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 15,
+    textAlign: "center",
   },
 });
