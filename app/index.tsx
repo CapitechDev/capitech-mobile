@@ -1,15 +1,15 @@
 import { Link } from "expo-router";
 import React from "react";
+
 import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 //import { Feather } from "@expo/vector-icons";
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Bem-vindo à CapiTech</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Bem-vindo à CapiTech</Text>
 
           <View style={[styles.card, { backgroundColor: "#1EA0D1" }]}>
             <View style={styles.cardRow}>
@@ -84,19 +84,17 @@ export default function HomeScreen() {
               />
             </View>
           </View>
+
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#F5F5F5",
-  },
   scrollContainer: {
     flexGrow: 1,
+    backgroundColor: "#F5F5F5",
   },
   container: {
     flex: 1,
