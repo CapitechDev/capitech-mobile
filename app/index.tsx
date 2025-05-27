@@ -1,8 +1,7 @@
 import { Link } from "expo-router";
 import React from "react";
 
-import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 //import { Feather } from "@expo/vector-icons";
 
 export default function HomeScreen() {
@@ -84,9 +83,7 @@ export default function HomeScreen() {
               />
             </View>
           </View>
-
         </View>
-      </View>
     </ScrollView>
   );
 }
