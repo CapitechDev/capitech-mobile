@@ -1,5 +1,4 @@
 import { Image, ImageBackground } from 'react-native';
-import { Image as RNImage } from 'react-native';
 import { useEffect, useState } from 'react';
 
 const trailImages: Record<string, any> = {
