@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2",
     borderTopWidth: 1,
     borderTopColor: "#ccc",
+    zIndex: 2, // Adicionado para ficar na frente do menu
   },
 });
 
