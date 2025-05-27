@@ -18,8 +18,6 @@ const TrailDescription = () => {
     }
   }, [params.trail]);
 
-  console.log({ trail });
-
   if (!trail) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -40,7 +38,7 @@ const TrailDescription = () => {
               ${trail.name}
             </h2>
         </section>
-        <section class="container mx-auto max-w-5xl p-10 px-2 text-black">
+        <section class="container mx-auto max-w-5xl p-10 px-4 text-black">
             <h2 class="text-center font-headline text-xl font-semibold text-black mb-5">
                 ${trail.subtitle}
             </h2>
