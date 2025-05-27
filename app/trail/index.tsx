@@ -34,14 +34,14 @@ const TrailDescription = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script src="https://cdn.tailwindcss.com"></script>
       </head>
-      <body class="p-4 bg-white text-gray-900">
-        <section className="bg-capi_blue_home_darker text-white text-center gap-8 p-8">
-            <h2 className="font-headline font-semibold text-4xl">
+      <body class="pb-4 bg-white text-gray-900">
+        <section class="bg-[#5190bd] text-white text-center gap-8 p-2">
+            <h2 class="font-semibold text-2xl">
               ${trail.name}
             </h2>
         </section>
-        <section className="container mx-auto max-w-5xl p-10 px-2 text-black">
-            <h2 className="text-center font-headline text-2xl font-semibold text-black mb-5">
+        <section class="container mx-auto max-w-5xl p-10 px-2 text-black">
+            <h2 class="text-center font-headline text-xl font-semibold text-black mb-5">
                 ${trail.subtitle}
             </h2>
 
@@ -49,18 +49,18 @@ const TrailDescription = () => {
                 ${trail.description}
             </div>
 
-            <h3 className="text-center text-xl font-semibold mb-7">
+            <h3 class="text-center text-xl font-semibold mb-7">
                 Para se aprofundar no assunto, temos alguns vídeos como
                 recomendação:
             </h3>
 
-            <p className="text-lg mb-8">
+            <p class="text-lg mb-8">
                 <b>Descrição: </b>
                 ${trail.video_description}
             </p>
 
             <a href="${trail.references}" rel="noreferrer" target="_blank">
-                <p className="text-center underline text-blue-700 font-bold transition duration-300 hover:text-blue-800 mb-10">
+                <p class="text-center underline text-blue-700 font-bold transition duration-300 hover:text-blue-800 mb-10">
                   - ${trail.video_title}
                 </p>
             </a>
