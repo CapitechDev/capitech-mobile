@@ -47,99 +47,99 @@ export default function HomeScreen() {
       <View style={styles.container}>
         <Text style={styles.title}>Bem-vindo ao CapiTech</Text>
 
-          <View style={[styles.card, { backgroundColor: "#1EA0D1" }]}>
-            <View style={styles.cardRow}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.cardTitle}>Trilhas Apreendizagem</Text>
-                <Text style={styles.cardContent}>
-                  Confira nossos serviços e soluções tecnológicas
-                </Text>
-              </View>
-              <Image style={styles.icon}
-                source={require('../assets/img_home/trilha.png')}
-                resizeMode="cover"
-              />
+        <View style={[styles.card, { backgroundColor: "#1EA0D1" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.cardTitle}>Trilhas Apreendizagem</Text>
+              <Text style={styles.cardContent}>
+                Confira nossos serviços e soluções tecnológicas
+              </Text>
             </View>
+            <Image style={styles.icon}
+              source={require('../assets/img_home/trilha.png')}
+              resizeMode="cover"
+            />
           </View>
-        
-          <View style={[styles.card, { backgroundColor: "#63C770" }]}>
-            <View style={styles.cardRow}>
-              <View style={{ flex: 1 }}>
-                <Link href={"/notice"} style={styles.cardTitle}>Notícias</Link>
-                <Text style={styles.cardContent}>
-                  Fique por dentro das últimas novidades do mundo da tecnologia
-                </Text>
-              </View>
-              <Image style={styles.icon}
-                source={require('../assets/img_home/world-news.png')}
-                resizeMode="cover"
-              />
-            </View>
-          </View>
-
-          <View style={[styles.card, { backgroundColor: "#D376EA" }]}>
-            <View style={styles.cardRow}>
-              <View style={{ flex: 1 }}>
-                <Link href={"/contact"} style={styles.cardTitle}>Contato</Link>
-                <Text style={styles.cardContent}>
-                  Entre em contato com nossa equipe
-                </Text>
-              </View>
-              <Image style={styles.icon}
-                source={require('../assets/img_home/chat-de-video.png')}
-                resizeMode="cover"
-              />
-            </View>
-          </View>
-        
-          <View style={[styles.card, { backgroundColor: "#FB3535" }]}>
-            <View style={styles.cardRow}>
-              <View style={{ flex: 1 }}>
-                <Link href={"/vestibular"} style={styles.cardTitle}>Vestibular</Link>
-                <Text style={styles.cardContent}>
-                  Fique por dentro do vestibular da Fatec
-                </Text>
-              </View>
-              <Image style={styles.icon}
-                source={require('../assets/img_home/academico.png')}
-                resizeMode="cover"
-              />
-            </View>
-          </View>
-
-          <View style={[styles.card, { backgroundColor: "#FF8C00" }]}>
-            <View style={styles.cardRow}>
-              <View style={{ flex: 1 }}>
-                <Link href={"/about"} style={styles.cardTitle}>Sobre</Link>
-                <Text style={styles.cardContent}>
-                  Conheça mais sobre o projeto
-                </Text>
-              </View>
-              <Image style={styles.icon}
-                source={require('../assets/img_home/about.png')}
-                resizeMode="cover"
-              />
-            </View>
-          
-            <View style={styles.trailsGrid}>
-              {trails.map((trail) => (
-                <TouchableOpacity key={trail._id} style={styles.trailCard} onPress={() => {
-                  router.push({
-                    pathname: "/trail",
-                    params: {
-                      trail: JSON.stringify(trail),
-                    },
-                  });
-                }}>
-                  <TrailImage trailName={trail.name}/>
-                  <View style={styles.trailTextContainer}>
-                    <Text style={styles.trailName}>{trail.name}</Text>
-                    <Text style={styles.trailSubtitle}>{trail.subtitle}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
         </View>
+
+        <View style={[styles.card, { backgroundColor: "#63C770" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Link href={"/notice"} style={styles.cardTitle}>Notícias</Link>
+              <Text style={styles.cardContent}>
+                Fique por dentro das últimas novidades do mundo da tecnologia
+              </Text>
+            </View>
+            <Image style={styles.icon}
+              source={require('../assets/img_home/world-news.png')}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
+
+        <View style={[styles.card, { backgroundColor: "#D376EA" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Link href={"/contact"} style={styles.cardTitle}>Contato</Link>
+              <Text style={styles.cardContent}>
+                Entre em contato com nossa equipe
+              </Text>
+            </View>
+            <Image style={styles.icon}
+              source={require('../assets/img_home/chat-de-video.png')}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
+
+        <View style={[styles.card, { backgroundColor: "#FB3535" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Link href={"/vestibular"} style={styles.cardTitle}>Vestibular</Link>
+              <Text style={styles.cardContent}>
+                Fique por dentro do vestibular da Fatec
+              </Text>
+            </View>
+            <Image style={styles.icon}
+              source={require('../assets/img_home/academico.png')}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
+
+        <View style={[styles.card, { backgroundColor: "#FF8C00" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Link href={"/about"} style={styles.cardTitle}>Sobre</Link>
+              <Text style={styles.cardContent}>
+                Conheça mais sobre o projeto
+              </Text>
+            </View>
+            <Image style={styles.icon}
+              source={require('../assets/img_home/about.png')}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
+        <View style={styles.trailsGrid}>
+          {trails.map((trail) => (
+            <TouchableOpacity key={trail._id} style={styles.trailCard} onPress={() => {
+              router.push({
+                pathname: "/trail",
+                params: {
+                  trail: JSON.stringify(trail),
+                },
+              });
+            }}>
+              <TrailImage trailName={trail.name} />
+              <View style={styles.trailTextContainer}>
+                <Text style={styles.trailName}>{trail.name}</Text>
+                <Text style={styles.trailSubtitle}>{trail.subtitle}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
     </ScrollView>
   );
 }
