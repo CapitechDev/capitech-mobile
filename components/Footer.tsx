@@ -11,20 +11,20 @@ const Footer = () => {
         <Ionicons name="home-outline" size={28} color="#333" />
       </Link>
 
+      <Link href="/notice">
+        <Ionicons name="notifications-outline" size={28} color="#333" />
+      </Link>
+
+      <Link href="/messages">
+        <Ionicons name="chatbubble-ellipses-outline" size={28} color="#333" />
+      </Link>
+
       <Link href="/contact">
         <Ionicons name="call-outline" size={28} color="#333" />
       </Link>
 
       <Link href="/vestibular">
         <Ionicons name="school-outline" size={28} color="#333" />
-      </Link>
-
-      <Link href="/notifications">
-        <Ionicons name="notifications-outline" size={28} color="#333" />
-      </Link>
-
-      <Link href="/messages">
-        <Ionicons name="chatbubble-ellipses-outline" size={28} color="#333" />
       </Link>
 
       <Link href="/about">
