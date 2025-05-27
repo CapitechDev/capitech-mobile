@@ -9,7 +9,7 @@ export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        <Text style={styles.title}>Bem-vindo à CapiTech</Text>
+        <Text style={styles.title}>Bem-vindo ao CapiTech</Text>
 
           <View style={[styles.card, { backgroundColor: "#1EA0D1" }]}>
             <View style={styles.cardRow}>
@@ -86,7 +86,7 @@ export default function HomeScreen() {
           </View>
 
         </View>
-      </View>
+
     </ScrollView>
   );
 }

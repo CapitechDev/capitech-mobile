@@ -6,9 +6,9 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 const NavBar = () => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.menuIcon}>
+      {/* <TouchableOpacity style={styles.menuIcon}>
         <Feather name="menu" size={32} color="white" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <View style={styles.centerContainer}>
         <Link href="/" asChild>
