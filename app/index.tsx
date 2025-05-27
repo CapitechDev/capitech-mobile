@@ -1,47 +1,13 @@
-import { Link, router } from "expo-router";
-import React, { useEffect } from "react";
+import { Link } from "expo-router";
+import React from "react";
 import {
   Image,
   ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+  Text, View
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-// Line removed as it is unused.
-import { getTrails } from "../api/capiApi";
-import { Trail } from "../types/Trails";
-import { TrailImage } from "../components/TrailImage";
-//import { Feather } from "@expo/vector-icons";
 
 export default function HomeScreen() {
-  const [trails, setTrails] = React.useState<Trail[]>([]);
-
-  const fetchTrails = async () => {
-    try {
-      const trailsData = await getTrails();
-
-      console.log({ trailsData });
-
-      if (trailsData.success) {
-        setTrails(trailsData.data);
-      } else {
-        console.error("Failed to fetch trails:", trailsData.message);
-      }
-    } catch (error: any) {
-      console.log("Error fetching trails:", error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchTrails();
-  }, []);
-
-  useEffect(() => {
-    console.log("Trails fetched:", trails);
-  }, [trails]);
-
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
@@ -50,7 +16,7 @@ export default function HomeScreen() {
         <View style={[styles.card, { backgroundColor: "#1EA0D1" }]}>
           <View style={styles.cardRow}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.cardTitle}>Trilhas Apreendizagem</Text>
+              <Link href={"/content"} style={styles.cardTitle}>Trilhas Apreendizagem</Link>
               <Text style={styles.cardContent}>
                 Confira nossos serviços e soluções tecnológicas
               </Text>
@@ -121,24 +87,6 @@ export default function HomeScreen() {
             />
           </View>
         </View>
-        <View style={styles.trailsGrid}>
-          {trails.map((trail) => (
-            <TouchableOpacity key={trail._id} style={styles.trailCard} onPress={() => {
-              router.push({
-                pathname: "/trail",
-                params: {
-                  trail: JSON.stringify(trail),
-                },
-              });
-            }}>
-              <TrailImage trailName={trail.name} />
-              <View style={styles.trailTextContainer}>
-                <Text style={styles.trailName}>{trail.name}</Text>
-                <Text style={styles.trailSubtitle}>{trail.subtitle}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
       </View>
     </ScrollView>
   );
@@ -186,57 +134,6 @@ const styles = StyleSheet.create({
   cardContent: {
     fontSize: 16,
     color: "#555",
-  },
-  trailsGrid: {
-    width: "100%",
-    flexDirection: "column",
-    gap: 16,
-    marginTop: 24,
-    marginBottom: 24,
-  },
-  trailCard: {
-    backgroundColor: "#4b5563",
-    color: "#fff",
-    borderRadius: 12,
-    padding: 18,
-    marginBottom: 10,
-    alignItems: "center",
-    flex: 1,
-    minWidth: 100,
-  },
-  trailImagePlaceholder: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 12,
-  },
-  trailImageText: {
-    fontSize: 32,
-    color: "#2F4172",
-    fontWeight: "bold",
-  },
-  trailTextContainer: {
-    marginTop: 20,
-    alignItems: "center",
-  },
-  trailName: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 6,
-    textAlign: "center",
-  },
-  trailSubtitleLink: {
-    textDecorationLine: "underline",
-  },
-  trailSubtitle: {
-    fontSize: 16,
-    color: "#fff",
-    fontWeight: "bold",
-    textAlign: "center",
   },
   icon: {
     width: 55,
