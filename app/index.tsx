@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { api } from "../services/api";
+// Line removed as it is unused.
 import { getTrails } from "../api/capiApi";
 import { Trail } from "../types/Trails";
 import { TrailImage } from "../components/TrailImage";
