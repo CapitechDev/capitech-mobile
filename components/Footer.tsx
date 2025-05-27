@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -11,12 +11,12 @@ const Footer = () => {
         <Ionicons name="home-outline" size={28} color="#333" />
       </Link>
 
-      <Link href="/notice">
-        <Ionicons name="notifications-outline" size={28} color="#333" />
+      <Link href="/trail">
+        <AntDesign name="rocket1" size={28} color="#333" />
       </Link>
 
-      <Link href="/messages">
-        <Ionicons name="chatbubble-ellipses-outline" size={28} color="#333" />
+      <Link href="/notice">
+        <Ionicons name="newspaper-outline" size={28} color="#333" />
       </Link>
 
       <Link href="/contact">

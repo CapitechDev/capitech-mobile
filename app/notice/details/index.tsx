@@ -62,7 +62,7 @@ export default function NewsDetailPage() {
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, paddingHorizontal: 20, paddingTop: 20 },
+  container: { flexGrow: 1, paddingHorizontal: 20, paddingTop: 20, backgroundColor: "#fff" },
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 10 },
   author: { fontSize: 16, color: "#888", marginBottom: 10 },
   publishedAt: { fontSize: 14, color: "#888", marginBottom: 15 },
