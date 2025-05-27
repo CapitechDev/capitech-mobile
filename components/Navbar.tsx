@@ -1,14 +1,18 @@
-import { Feather } from "@expo/vector-icons";
-import { Link, Slot } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const NavBar = () => {
+type NavBarProps = {
+  onMenuPress: () => void;
+};
+
+const NavBar = ({ onMenuPress }: NavBarProps) => {
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity style={styles.menuIcon}>
-        <Feather name="menu" size={32} color="white" />
-      </TouchableOpacity> */}
+      <TouchableOpacity style={styles.menuIcon} onPress={onMenuPress}>
+        <Ionicons name="menu" size={32} color="white" />
+      </TouchableOpacity>
 
       <View style={styles.centerContainer}>
         <Link href="/" asChild>
@@ -39,10 +43,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 16,
+    zIndex: 2, // Adicionado para ficar na frente do menu
   },
   menuIcon: {
     position: "absolute",
     left: 16,
+    height: "100%",
+    justifyContent: "center",
   },
   centerContainer: {
     flexDirection: "row",
@@ -51,20 +58,19 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   spacer: {
-    width: 48, // para balancear com o menu à esquerda
+    width: 48,
   },
   text: {
     color: "#fff",
-    fontSize: 28, // aumentado
+    fontSize: 28,
     fontWeight: "bold",
     marginHorizontal: 6,
   },
   logo: {
-    width: 60, // aumentado
+    width: 60,
     height: 60,
     marginHorizontal: 6,
   },
 });
 
 export default NavBar;
-  
