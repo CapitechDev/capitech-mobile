@@ -1,6 +1,7 @@
 import { Link, router } from "expo-router";
 import React, { useEffect } from "react";
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { api } from "../services/api";
 import { getTrails } from "../api/capiApi";
 import { Trail } from "../types/Trails";
+import { TrailImage } from "../components/TrailImage";
 
 export default function HomeScreen() {
   const [trails, setTrails] = React.useState<Trail[]>([]);
@@ -86,30 +88,20 @@ export default function HomeScreen() {
           </View>
           <View style={styles.trailsGrid}>
             {trails.map((trail) => (
-              <View key={trail._id} style={styles.trailCard}>
-                {/* Substitua HomeTrailImage por um componente de imagem real, se necessário */}
-                {/* <HomeTrailImage trailName={trail.name} /> */}
-                <View style={styles.trailImagePlaceholder}>
-                  <Text style={styles.trailImageText}>{trail.name[0]}</Text>
-                </View>
+              <TouchableOpacity key={trail._id} style={styles.trailCard} onPress={() => {
+                router.push({
+                  pathname: "/trail",
+                  params: {
+                    trail: JSON.stringify(trail),
+                  },
+                });
+              }}>
+                <TrailImage trailName={trail.name}/>
                 <View style={styles.trailTextContainer}>
                   <Text style={styles.trailName}>{trail.name}</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      router.push({
-                        pathname: "/trail",
-                        params: {
-                          trail: JSON.stringify(trail),
-                        },
-                      });
-                    }}
-                    // href={`/trilhas/${trail._id}`}
-                    // style={styles.trailSubtitleLink}
-                  >
-                    <Text style={styles.trailSubtitle}>{trail.subtitle}</Text>
-                  </TouchableOpacity>
+                  <Text style={styles.trailSubtitle}>{trail.subtitle}</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -168,9 +160,10 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   trailCard: {
-    backgroundColor: "#2F4172",
+    backgroundColor: "#4b5563",
+    color: "#fff",
     borderRadius: 12,
-    padding: 16,
+    padding: 18,
     marginBottom: 10,
     alignItems: "center",
     flex: 1,
@@ -191,6 +184,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   trailTextContainer: {
+    marginTop: 20,
     alignItems: "center",
   },
   trailName: {
