@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "../components/Footer";
 import Menu from "../components/Menu";
 import NavBar from "../components/Navbar";
+import BotaoChat from "../components/chat/BotaoChat";
 
 export default function RootLayout() {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -22,8 +23,8 @@ export default function RootLayout() {
 
       {/* Menu lateral */}
       <Menu visible={menuVisible} onClose={() => setMenuVisible(false)} />
-
       <Footer />
+      <BotaoChat />
     </SafeAreaView>
   );
 }

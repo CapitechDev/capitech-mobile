@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   icon: {
+  icon: {
     width: 55,
     height: 55,
     borderRadius: 10,
