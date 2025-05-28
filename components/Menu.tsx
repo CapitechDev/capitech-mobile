@@ -2,14 +2,13 @@ import React, { useEffect, useRef } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Modal, Pressable, Animated } from "react-native";
 import { HrefObject, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type MenuProps = {
   visible: boolean;
   onClose: () => void;
 };
 
-const MENU_WIDTH = 280; // Aumentei um pouco a largura
+const MENU_WIDTH = 280;
 
 export default function Menu({ visible, onClose }: MenuProps) {
   const router = useRouter();
@@ -39,7 +38,7 @@ export default function Menu({ visible, onClose }: MenuProps) {
   type MenuItemProps = {
     route: string | HrefObject;
     title: string;
-    icon: keyof typeof Ionicons.glyphMap;
+    icon: React.ComponentProps<typeof Ionicons>["name"];
   };
 
   const MenuItem: React.FC<MenuItemProps> = ({ route, title, icon }) => (
@@ -47,21 +46,20 @@ export default function Menu({ visible, onClose }: MenuProps) {
       onPress={() => handleNavigate(route)} 
       style={styles.menuItem}
     >
-      <Ionicons name={icon} size={24} color="#2F4172" style={styles.menuIcon} />
+      <Ionicons name={icon} size={28} color="#333" style={styles.menuIcon} />
       <Text style={styles.menuText}>{title}</Text>
     </TouchableOpacity>
   );
 
   return (
     <Modal visible={visible} animationType="none" transparent>
-      <View style={[styles.overlay, { zIndex: 1 }]}>
-        <SafeAreaView>
+      <View style={styles.overlay}>
         <Pressable style={styles.backdrop} onPress={onClose} />
         <Animated.View style={[styles.menu, { transform: [{ translateX: slideAnim }] }]}>
           <View style={styles.header}>
             <Text style={styles.menuTitle}>Menu</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#2F4172" />
+              <Ionicons name="close" size={28} color="#333" />
             </TouchableOpacity>
           </View>
 
@@ -73,8 +71,8 @@ export default function Menu({ visible, onClose }: MenuProps) {
           <MenuItem route="/vestibular" title="Vestibular" icon="school-outline" />
           <MenuItem route="/about" title="Sobre" icon="information-circle-outline" />
           <MenuItem route="/contact" title="Contato" icon="mail-outline" />
+          <MenuItem route="/login" title="Login" icon="log-in-outline" />
         </Animated.View>
-        </SafeAreaView>
       </View>
     </Modal>
   );
@@ -83,7 +81,7 @@ export default function Menu({ visible, onClose }: MenuProps) {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    flexDirection: "row", // Alterado de "row-reverse" para "row"
+    flexDirection: "row-reverse", // Alterado de "row" para "row-reverse"
     backgroundColor: "rgba(0,0,0,0.4)",
     position: 'absolute',
     top: 0,
@@ -115,7 +113,7 @@ const styles = StyleSheet.create({
   menuTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#2F4172",
+    color: "#333",
   },
   closeButton: {
     padding: 8,
@@ -137,6 +135,6 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: 16,
-    color: "#2F4172",
+    color: "#333",
   },
 });

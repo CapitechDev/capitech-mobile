@@ -1,15 +1,44 @@
 import React from "react";
 import {
-  Image,
-  Linking,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
 } from "react-native";
+import { WebView } from "react-native-webview";
+import { Linking } from "react-native";
 
 export default function Vestibular() {
+  const mapHTML = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <style>
+          html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+          }
+        </style>
+      </head>
+      <body>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3658.037889615343!2d-47.449348699999994!3d-23.5311396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c58b72bdd65027%3A0xb94c5e9f90d48401!2sFatec%20Votorantim!5e0!3m2!1spt-BR!2sbr!4v1748385844919!5m2!1spt-BR!2sbr"
+          width="100%"
+          height="100%"
+          style="border:0;"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen="false">
+        </iframe>
+      </body>
+    </html>
+  `;
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
@@ -26,11 +55,21 @@ export default function Vestibular() {
         </Text>
       </View>
 
-      <Image
-        source={require("../../assets/fatec_img.png")}
-        style={styles.mainImage}
-        resizeMode="contain"
-      />
+      <View style={styles.mapContainer}>
+        <WebView
+          source={{ html: mapHTML }}
+          style={styles.map}
+          scrollEnabled={false}
+          domStorageEnabled={true}
+          javaScriptEnabled={true}
+          startInLoadingState={true}
+          onNavigationStateChange={(event) => {
+            if (event.navigationType === 'click') {
+              return false;
+            }
+          }}
+        />
+      </View>
 
       <View style={styles.card}>
         <Text style={styles.cardText}>
@@ -107,11 +146,15 @@ const styles = StyleSheet.create({
     color: "#444",
     textAlign: "center",
   },
-  mainImage: {
+  mapContainer: {
     width: "90%",
-    height: 220,
+    height: 300, // Aumentado para melhor visualização
     marginVertical: 10,
     borderRadius: 12,
+    overflow: "hidden",
+  },
+  map: {
+    flex: 1,
   },
   card: {
     backgroundColor: "#E5E5E5",
