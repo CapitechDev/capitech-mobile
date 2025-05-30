@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Alert } from "react-native";
+import { router } from "expo-router";
 
-export default function Login() {
+export default function Register() {
     const [focusedInput, setFocusedInput] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -26,6 +27,10 @@ export default function Login() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleBackToLogin = () => {
+        router.back();
     };
 
     return (
@@ -104,6 +109,12 @@ export default function Login() {
                             <Text style={styles.registerButtonText}>Registre-se</Text>
                         </TouchableOpacity>
 
+                        <TouchableOpacity 
+                            style={styles.loginButton}
+                            onPress={handleBackToLogin}
+                        >
+                            <Text style={styles.loginButtonText}>Voltar para login</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -154,18 +165,6 @@ const styles = StyleSheet.create({
         color: '#FFF',
         marginBottom: 16,
     },
-    loginButton: {
-        backgroundColor: '#2196F3',
-        padding: 15,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    loginButtonText: {
-        color: '#FFF',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
     registerButton: {
         backgroundColor: '#4CAF50',
         padding: 15,
@@ -174,6 +173,18 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     registerButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    loginButton: {
+        backgroundColor: '#2196F3',
+        padding: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    loginButtonText: {
         color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold',
