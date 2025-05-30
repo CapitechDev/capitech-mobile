@@ -1,12 +1,15 @@
 import React from "react";
+
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Card } from "../components/Card";
+
 
 export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={[styles.container]}>
         <Text style={styles.title}>Bem-vindo ao CapiTech</Text>
+
 
         <Card
           title="Trilhas Apreendizagem"
