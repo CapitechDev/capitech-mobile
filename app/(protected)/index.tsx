@@ -1,7 +1,6 @@
 import React from "react";
 
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Card } from "../components/Card";
 
 
 export default function HomeScreen() {
@@ -10,46 +9,80 @@ export default function HomeScreen() {
       <View style={[styles.container]}>
         <Text style={styles.title}>Bem-vindo ao CapiTech</Text>
 
+        <View style={[styles.card, { backgroundColor: "#1EA0D1" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Link href={"/content"} style={styles.cardTitle}>Trilhas Apreendizagem</Link>
+              <Text style={styles.cardContent}>
+                Confira nossos serviços e soluções tecnológicas
+              </Text>
+            </View>
+            <Image style={styles.icon}
+              source={require('../../assets/img_home/trilha.png')}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
 
-        <Card
-          title="Trilhas Apreendizagem"
-          content="Confira nossos serviços e soluções tecnológicas"
-          backgroundColor="#1EA0D1"
-          icon={require('../assets/img_home/trilha.png')}
-          href="/content"
-        />
+        <View style={[styles.card, { backgroundColor: "#63C770" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Link href={"/notice"} style={styles.cardTitle}>Notícias</Link>
+              <Text style={styles.cardContent}>
+                Fique por dentro das últimas novidades do mundo da tecnologia
+              </Text>
+            </View>
+            <Image style={styles.icon}
+              source={require('../../assets/img_home/world-news.png')}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
 
-        <Card
-          title="Notícias"
-          content="Fique por dentro das últimas novidades do mundo da tecnologia"
-          backgroundColor="#63C770"
-          icon={require('../assets/img_home/world-news.png')}
-          href="/notice"
-        />
+        <View style={[styles.card, { backgroundColor: "#D376EA" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Link href={"/contact"} style={styles.cardTitle}>Contato</Link>
+              <Text style={styles.cardContent}>
+                Entre em contato com nossa equipe
+              </Text>
+            </View>
+            <Image style={styles.icon}
+              source={require('../../assets/img_home/chat-de-video.png')}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
 
-        <Card
-          title="Contato"
-          content="Entre em contato com nossa equipe"
-          backgroundColor="#D376EA"
-          icon={require('../assets/img_home/chat-de-video.png')}
-          href="/contact"
-        />
+        <View style={[styles.card, { backgroundColor: "#FB3535" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Link href={"/vestibular"} style={styles.cardTitle}>Vestibular</Link>
+              <Text style={styles.cardContent}>
+                Fique por dentro do vestibular da Fatec
+              </Text>
+            </View>
+            <Image style={styles.icon}
+              source={require('../../assets/img_home/academico.png')}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
 
-        <Card
-          title="Vestibular"
-          content="Fique por dentro do vestibular da Fatec"
-          backgroundColor="#FB3535"
-          icon={require('../assets/img_home/academico.png')}
-          href="/vestibular"
-        />
-
-        <Card
-          title="Sobre"
-          content="Conheça mais sobre o projeto"
-          backgroundColor="#FF8C00"
-          icon={require('../assets/img_home/about.png')}
-          href="/about"
-        />
+        <View style={[styles.card, { backgroundColor: "#FF8C00" }]}>
+          <View style={styles.cardRow}>
+            <View style={{ flex: 1 }}>
+              <Link href={"/about"} style={styles.cardTitle}>Sobre</Link>
+              <Text style={styles.cardContent}>
+                Conheça mais sobre o projeto
+              </Text>
+            </View>
+            <Image style={styles.icon}
+              source={require('../../assets/img_home/about.png')}
+              resizeMode="cover"
+            />
+          </View>
+        </View>
       </View>
     </ScrollView>
   );
