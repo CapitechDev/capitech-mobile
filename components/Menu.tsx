@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Modal, Pressable, Animated } from "react-native";
-import { HrefObject, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { HrefObject, useRouter } from "expo-router";
+import React, { useEffect, useRef } from "react";
+import { Animated, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type MenuProps = {
   visible: boolean;
