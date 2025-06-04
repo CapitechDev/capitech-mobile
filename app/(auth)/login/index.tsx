@@ -120,7 +120,9 @@ export default function Login() {
                 <Text style={styles.registerButtonText}>Registre-se</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.forgotPassword}>
+              <TouchableOpacity style={styles.forgotPassword}
+              onPress={()=> router.push("/forgot-password")}
+              >
                 <Text style={styles.forgotPasswordText}>
                   Esqueci minha senha
                 </Text>
