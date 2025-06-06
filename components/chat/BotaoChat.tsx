@@ -1,12 +1,12 @@
 import { useState } from "react";
 import {
-  Modal,
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
   Image,
+  Modal,
   Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import JanelaChat from "./JanelaChat"; // Certifique-se de que este componente existe e está no caminho correto
 
@@ -33,12 +33,45 @@ export default function BotaoChat() {
               overflow: "hidden",
             }}
           >
-            <TouchableOpacity
-              style={styles.fechar}
-              onPress={() => setAberto(false)}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingHorizontal: 16,
+                paddingVertical: 4,
+              }}
             >
-              <Text style={styles.fecharTexto}>✖</Text>
-            </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  padding: 4,
+                  gap: 8,
+                }}
+              >
+                <Image
+                  source={require("../../assets/CapiBot.png")}
+                  style={{
+                    width: 48,
+                    height: 48,
+                    backgroundColor: "#FCFCFC60",
+                    borderRadius: 30,
+                  }}
+                />
+                <Text
+                  style={{ color: "white", fontSize: 18, fontWeight: "bold" }}
+                >
+                  CapiBot
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.fechar}
+                onPress={() => setAberto(false)}
+              >
+                <Text style={styles.fecharTexto}>×</Text>
+              </TouchableOpacity>
+            </View>
           </View>
           <View
             style={{
@@ -48,7 +81,7 @@ export default function BotaoChat() {
               borderBottomRightRadius: 12,
             }}
           >
-            <JanelaChat />
+            <JanelaChat mensagemInicial="Olá" />
           </View>
         </View>
       </Modal>
@@ -80,11 +113,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   fecharTexto: {
-    fontSize: 28,
-    color: "#fff", // Força branco em todos os sistemas
+    fontSize: 32,
+    color: "white",
     fontWeight: "bold",
-    textShadowColor: "#000", // Sombra preta para contraste
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 2,
+    textAlign: "center",
+    includeFontPadding: false,
   },
 });
