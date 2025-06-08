@@ -2,17 +2,19 @@ import { Ionicons } from "@expo/vector-icons";
 import { HrefObject, useRouter } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import { Animated, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useAuth } from "../hooks/useAuth";
+
+const MENU_WIDTH = 280;
 
 type MenuProps = {
   visible: boolean;
   onClose: () => void;
 };
 
-const MENU_WIDTH = 280;
-
 export default function Menu({ visible, onClose }: MenuProps) {
   const router = useRouter();
   const slideAnim = useRef(new Animated.Value(-MENU_WIDTH)).current;
+  const { logout } = useAuth();
 
   useEffect(() => {
     if (visible) {
@@ -31,8 +33,13 @@ export default function Menu({ visible, onClose }: MenuProps) {
   }, [visible]);
 
   const handleNavigate = (route: string | HrefObject) => {
+    if (route === "/logout") {
+      logout(); // Chama a função de logout
+      router.replace("/login"); // Força o reload e redireciona para login
+    } else {
+      router.push(route);
+    }
     onClose();
-    router.push(route);
   };
 
   type MenuItemProps = {
@@ -71,7 +78,7 @@ export default function Menu({ visible, onClose }: MenuProps) {
           <MenuItem route="/vestibular" title="Vestibular" icon="school-outline" />
           <MenuItem route="/about" title="Sobre" icon="information-circle-outline" />
           <MenuItem route="/contact" title="Contato" icon="mail-outline" />
-          <MenuItem route="/login" title="Login" icon="log-in-outline" />
+          <MenuItem route="/logout" title="Logout" icon="log-in-outline" />
         </Animated.View>
       </View>
     </Modal>
