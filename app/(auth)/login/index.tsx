@@ -1,5 +1,5 @@
 import axios from "axios";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -20,25 +20,47 @@ export default function Login() {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
+    password: "",
   });
 
-  const { login } = useAuth()
+  const { login } = useAuth();
+  const router = useRouter();
 
-  const handleLogin = async () => {
-    if (!formData.email || !formData.name) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos");
-      return;
+  const validateLoginForm = (email: string, password: string) => {
+    if (!email || !password) {
+      Alert.alert("Erro", "Todos os campos são obrigatórios");
+      return false;
     }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      Alert.alert("Erro", "E-mail inválido");
+      return false;
+    }
+    if (password.length < 6) {
+      Alert.alert("Erro", "Senha deve ter pelo menos 6 caracteres");
+      return false;
+    }
+    return true;
+  };
 
-    setLoading(true);
+  const handleLogin = async (email: string, password: string) => {
     try {
-    const response = await axios.post("")
+      const response = await axios.post("http://192.168.1.8:4000/users-mobile/login", {
+        email,
+        password,
+      });
+      const token = response.data.token;
+      login(token);
+      router.replace("/");
     } catch (error) {
+      console.error("Erro ao fazer login:", error);
       Alert.alert("Erro", "Ocorreu um erro ao fazer login");
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  const handleLoginPress = () => {
+    if (validateLoginForm(formData.email, formData.password)) {
+      handleLogin(formData.email, formData.password);
     }
   };
 
@@ -51,9 +73,9 @@ export default function Login() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <View style={styles.content}>
-            <Image 
-            source={require("../../../assets/capivara.png")}
-            style={styles.CapiImage}
+            <Image
+              source={require("../../../assets/capivara.png")}
+              style={styles.CapiImage}
             />
             <View style={styles.headerContainer}>
               <Text style={styles.title}>
@@ -69,25 +91,7 @@ export default function Login() {
               <TextInput
                 style={[
                   styles.input,
-                  { borderColor: focusedInput === "name" ? "#2196F3" : "#FFF" },
-                ]}
-                placeholder="Digite seu nome"
-                placeholderTextColor="#555555"
-                autoCapitalize="none"
-                value={formData.name}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, name: text }))
-                }
-                onFocus={() => setFocusedInput("name")}
-                onBlur={() => setFocusedInput(null)}
-              />
-
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    borderColor: focusedInput === "email" ? "#2196F3" : "#FFF",
-                  },
+                  { borderColor: focusedInput === "email" ? "#2196F3" : "#FFF" },
                 ]}
                 placeholder="Digite seu E-mail"
                 placeholderTextColor="#555555"
@@ -101,9 +105,27 @@ export default function Login() {
                 onBlur={() => setFocusedInput(null)}
               />
 
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    borderColor: focusedInput === "password" ? "#2196F3" : "#FFF",
+                  },
+                ]}
+                placeholder="Digite sua senha"
+                placeholderTextColor="#555555"
+                secureTextEntry={true}
+                value={formData.password}
+                onChangeText={(text) =>
+                  setFormData((prev) => ({ ...prev, password: text }))
+                }
+                onFocus={() => setFocusedInput("password")}
+                onBlur={() => setFocusedInput(null)}
+              />
+
               <TouchableOpacity
                 style={styles.loginButton}
-                onPress={handleLogin}
+                onPress={handleLoginPress}
                 disabled={loading}
               >
                 {loading ? (
@@ -120,8 +142,9 @@ export default function Login() {
                 <Text style={styles.registerButtonText}>Registre-se</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.forgotPassword}
-              onPress={()=> router.push("/forgot-password")}
+              <TouchableOpacity
+                style={styles.forgotPassword}
+                onPress={() => router.push("/forgot-password")}
               >
                 <Text style={styles.forgotPasswordText}>
                   Esqueci minha senha
@@ -152,12 +175,12 @@ const styles = StyleSheet.create({
   headerContainer: {
     marginBottom: 40,
   },
-    CapiImage: {
-        width: 100,
-        height: 100,
-        alignSelf: "center",
-        marginBottom: 20,
-    },
+  CapiImage: {
+    width: 100,
+    height: 100,
+    alignSelf: "center",
+    marginBottom: 20,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -217,3 +240,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+
