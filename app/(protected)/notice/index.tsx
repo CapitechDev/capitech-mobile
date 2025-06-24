@@ -1,14 +1,15 @@
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  View,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  ScrollView, ActivityIndicator
+  View
 } from "react-native";
-import { newsApi } from "../../services/newsApi";
-import { router } from "expo-router";
-import { Article, NewsArticle } from "../../types/Articles";
+import { newsApi } from "../../../services/newsApi";
+import { Article, NewsArticle } from "../../../types/Articles";
 
 export default function Notice() {
   const [articles, setArticles] = useState<Article[]>([]);

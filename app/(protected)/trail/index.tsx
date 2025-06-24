@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { WebView } from "react-native-webview";
-import { Trail } from "../../types/Trails";
 import { useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import { WebView } from "react-native-webview";
+import { Trail } from "../../../types/Trails";
 
 const TrailDescription = () => {
   const params = useLocalSearchParams();

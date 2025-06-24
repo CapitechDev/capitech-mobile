@@ -2,25 +2,24 @@ import axios from "axios";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    Keyboard,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+  ActivityIndicator,
+  Alert,
+  Keyboard,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [token, setToken] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
-  const [showTokenFields, setShowTokenFields] = useState(false); // Novo estado para controlar a exibição dos campos
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,45 +44,73 @@ export default function ForgotPassword() {
       };
 
       const response = await axios.post(
-        "http://172.20.10.3:400/users-mobile/forgot-password",
+        "http://192.168.1.8:4000/users-mobile/forgot-password",
         data
       );
       //await new Promise((resolve) => setTimeout(resolve, 500));
-       console.log("Resposta do backend:", response.data);
+      console.log("Resposta do backend:", response.data);
 
-    Alert.alert(
-      "Sucesso",
-      "Se este email estiver cadastrado, você receberá as instruções para redefinir sua senha.",
-      [{ text: "OK", onPress: () => setShowTokenFields(true) }]
-    );
-  } catch (error: any) {
-    if (axios.isAxiosError(error)) {
-      console.log("Erro do backend:", error.response?.data);
-      Alert.alert("Erro", error.response?.data?.message || "Erro desconhecido no servidor");
-    } else {
-      console.log("Erro de conexão:", error);
-      Alert.alert("Erro", "Ocorreu um erro ao processar sua solicitação. Verifique sua conexão.");
+      Alert.alert(
+        "Sucesso",
+        "Se este email estiver cadastrado, você receberá as instruções para redefinir sua senha.",
+        [{ text: "OK" }]
+      );
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        console.log("Erro do backend:", error.response?.data);
+        Alert.alert(
+          "Erro",
+          error.response?.data?.message || "Erro desconhecido no servidor"
+        );
+      } else {
+        console.log("Erro de conexão:", error);
+        Alert.alert(
+          "Erro",
+          "Ocorreu um erro ao processar sua solicitação. Verifique sua conexão."
+        );
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-  const handleUpdatePassword = async () => {
-    if (!token || !newPassword) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos");
+  const handleResetPassword = async () => {
+    if (!token.trim() || !password.trim()) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos corretamente.");
       return;
     }
 
     setLoading(true);
     try {
-      // Simulação de atualização de senha
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const data = {
+        token: token.trim(),
+        password: password.trim(),
+      };
+
+      const response = await axios.post(
+        "http://192.168.1.8:4000/users-mobile/reset-password",
+        data
+      );
+
+      console.log("Resposta do backend:", response.data);
+
       Alert.alert("Sucesso", "Sua senha foi atualizada com sucesso!", [
         { text: "OK", onPress: () => router.push("/login") },
       ]);
     } catch (error) {
-      Alert.alert("Erro", "Ocorreu um erro ao atualizar sua senha");
+      if (axios.isAxiosError(error)) {
+        console.error("Erro do backend:", error.response?.data);
+        Alert.alert(
+          "Erro",
+          error.response?.data?.message || "Erro desconhecido no servidor"
+        );
+      } else {
+        console.error("Erro de conexão:", error);
+        Alert.alert(
+          "Erro",
+          "Ocorreu um erro ao processar sua solicitação. Verifique sua conexão."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -136,45 +163,39 @@ export default function ForgotPassword() {
                 )}
               </TouchableOpacity>
 
-              {showTokenFields && (
-                <>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Digite o token"
-                    placeholderTextColor="#555555"
-                    autoCapitalize="none"
-                    value={token}
-                    onChangeText={setToken}
-                    onFocus={() => setFocusedInput("token")}
-                    onBlur={() => setFocusedInput(null)}
-                  />
+              <TextInput
+                style={styles.input}
+                placeholder="Digite o token"
+                placeholderTextColor="#555555"
+                autoCapitalize="none"
+                value={token}
+                onChangeText={setToken}
+                onFocus={() => setFocusedInput("token")}
+                onBlur={() => setFocusedInput(null)}
+              />
 
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Digite sua nova senha"
-                    placeholderTextColor="#555555"
-                    secureTextEntry
-                    value={newPassword}
-                    onChangeText={setNewPassword}
-                    onFocus={() => setFocusedInput("newPassword")}
-                    onBlur={() => setFocusedInput(null)}
-                  />
+              <TextInput
+                style={styles.input}
+                placeholder="Digite sua nova senha"
+                placeholderTextColor="#555555"
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+                onFocus={() => setFocusedInput("newPassword")}
+                onBlur={() => setFocusedInput(null)}
+              />
 
-                  <TouchableOpacity
-                    style={styles.resetButton}
-                    onPress={handleUpdatePassword}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <ActivityIndicator color="#FFF" />
-                    ) : (
-                      <Text style={styles.resetButtonText}>
-                        Atualizar senha
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-                </>
-              )}
+              <TouchableOpacity
+                style={styles.resetButton}
+                onPress={handleResetPassword}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#FFF" />
+                ) : (
+                  <Text style={styles.resetButtonText}>Atualizar senha</Text>
+                )}
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.backButton}

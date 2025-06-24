@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Alert } from "react-native";
+import axios from 'axios';
 import { router } from "expo-router";
+import React, { useState } from "react";
+import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function Register() {
     const [focusedInput, setFocusedInput] = useState<string | null>(null);
@@ -11,19 +13,39 @@ export default function Register() {
         password: '',
         confirmPassword: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const handleLogin = async () => {
-        if (!formData.email || !formData.name) {
+    const handleRegister = async () => {
+        if (!formData.email || !formData.name || !formData.password || !formData.confirmPassword) {
             Alert.alert('Erro', 'Por favor, preencha todos os campos');
+            return;
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+            Alert.alert('Erro', 'As senhas não coincidem');
             return;
         }
 
         setLoading(true);
         try {
-            // Aqui vai a lógica de login
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulação
+            const response = await axios.post('http://192.168.1.8:4000/users-mobile/register', {
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+            });
+
+            if (response.status === 201) {
+                Alert.alert('Sucesso', 'Registro feito com sucesso!', [
+                    {
+                        text: 'Voltar para login',
+                        onPress: handleBackToLogin,
+                    },
+                ]);
+            }
         } catch (error) {
-            Alert.alert('Erro', 'Ocorreu um erro ao fazer login');
+            console.error('Erro ao registrar:', error);
+            Alert.alert('Erro', 'Ocorreu um erro ao registrar. Tente novamente.');
         } finally {
             setLoading(false);
         }
@@ -74,38 +96,56 @@ export default function Register() {
                             onBlur={() => setFocusedInput(null)}
                         />
 
-                        <TextInput
-                            style={[
-                                styles.input,
-                                { borderColor: focusedInput === 'password' ? '#2196F3' : '#FFF' }
-                            ]}
-                            placeholder="Digite sua senha"
-                            placeholderTextColor="#555555"
-                            keyboardType="visible-password"
-                            autoCapitalize="none"
-                            value={formData.password}
-                            onChangeText={(text) => setFormData(prev => ({ ...prev, password: text }))}
-                            onFocus={() => setFocusedInput('password')}
-                            onBlur={() => setFocusedInput(null)}
-                        />
+                        <View style={styles.passwordContainer}>
+                            <TextInput
+                                style={[
+                                    styles.input,
+                                    { borderColor: focusedInput === 'password' ? '#2196F3' : '#FFF' }
+                                ]}
+                                placeholder="Digite sua senha"
+                                placeholderTextColor="#555555"
+                                secureTextEntry={!showPassword}
+                                autoCapitalize="none"
+                                value={formData.password}
+                                onChangeText={(text) => setFormData(prev => ({ ...prev, password: text }))}
+                                onFocus={() => setFocusedInput('password')}
+                                onBlur={() => setFocusedInput(null)}
+                            />
+                            <TouchableOpacity
+                                style={styles.eyeButton}
+                                onPress={() => setShowPassword(!showPassword)}
+                            >
+                                <Icon name={showPassword ? 'visibility-off' : 'visibility'} size={24} color="#FFF" />
+                            </TouchableOpacity>
+                        </View>
 
-                        <TextInput
-                            style={[
-                                styles.input,
-                                { borderColor: focusedInput === 'confirmPassword' ? '#2196F3' : '#FFF' }
-                            ]}
-                            placeholder="Confirme sua senha"
-                            placeholderTextColor="#555555"
-                            keyboardType="visible-password"
-                            autoCapitalize="none"
-                            value={formData.confirmPassword}
-                            onChangeText={(text) => setFormData(prev => ({ ...prev, confirmPassword: text }))}
-                            onFocus={() => setFocusedInput('confirmPassword')}
-                            onBlur={() => setFocusedInput(null)}
-                        />
+                        <View style={styles.passwordContainer}>
+                            <TextInput
+                                style={[
+                                    styles.input,
+                                    { borderColor: focusedInput === 'confirmPassword' ? '#2196F3' : '#FFF' }
+                                ]}
+                                placeholder="Confirme sua senha"
+                                placeholderTextColor="#555555"
+                                secureTextEntry={!showConfirmPassword}
+                                autoCapitalize="none"
+                                value={formData.confirmPassword}
+                                onChangeText={(text) => setFormData(prev => ({ ...prev, confirmPassword: text }))}
+                                onFocus={() => setFocusedInput('confirmPassword')}
+                                onBlur={() => setFocusedInput(null)}
+                            />
+                            <TouchableOpacity
+                                style={styles.eyeButton}
+                                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                                <Icon name={showConfirmPassword ? 'visibility-off' : 'visibility'} size={24} color="#FFF" />
+                            </TouchableOpacity>
+                        </View>
                         
 
-                        <TouchableOpacity style={styles.registerButton}>
+                        <TouchableOpacity style={styles.registerButton}
+                        onPress={handleRegister}
+                        >
                             <Text style={styles.registerButtonText}>Registre-se</Text>
                         </TouchableOpacity>
 
@@ -164,6 +204,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#FFF',
         marginBottom: 16,
+    },
+    passwordContainer: {
+        position: 'relative',
+        width: '100%',
+    },
+    eyeButton: {
+        position: 'absolute',
+        right: 10,
+        top: 15,
+        zIndex: 1,
     },
     registerButton: {
         backgroundColor: '#4CAF50',

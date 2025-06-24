@@ -1,4 +1,5 @@
 import { router } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -7,10 +8,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { TrailImage } from "../../components/TrailImage";
-import { useEffect, useState } from "react";
-import { Trail } from "../../types/Trails";
-import { getTrails } from "../../api/capiApi";
+import { getTrails } from "../../../api/capiApi";
+import { TrailImage } from "../../../components/TrailImage";
+import { Trail } from "../../../types/Trails";
 
 export default function ContentIndex() {
   const [trails, setTrails] = useState<Trail[]>([]);

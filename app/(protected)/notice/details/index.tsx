@@ -1,16 +1,15 @@
 import { useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  Linking,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { useEffect, useState } from "react";
-import { Article } from "../../../types/Articles";
-
+import { Article } from "../../../../types/Articles";
 export default function NewsDetailPage() {
   const params = useLocalSearchParams();
   const [article, setArticle] = useState<Article | null>(null);
