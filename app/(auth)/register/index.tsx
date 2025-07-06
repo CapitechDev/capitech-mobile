@@ -29,7 +29,7 @@ export default function Register() {
 
         setLoading(true);
         try {
-            const response = await axios.post('http://192.168.1.8:4000/users-mobile/register', {
+            const response = await axios.post('http://10.68.153.112:4000/users-mobile/register', {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password,
