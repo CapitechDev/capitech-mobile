@@ -1,7 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
 import { HrefObject, useRouter } from "expo-router";
 import React, { useEffect, useRef } from "react";
-import { Animated, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Animated,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useAuth } from "../hooks/useAuth";
 
 const MENU_WIDTH = 280;
@@ -49,8 +57,8 @@ export default function Menu({ visible, onClose }: MenuProps) {
   };
 
   const MenuItem: React.FC<MenuItemProps> = ({ route, title, icon }) => (
-    <TouchableOpacity 
-      onPress={() => handleNavigate(route)} 
+    <TouchableOpacity
+      onPress={() => handleNavigate(route)}
       style={styles.menuItem}
     >
       <Ionicons name={icon} size={28} color="#333" style={styles.menuIcon} />
@@ -62,7 +70,9 @@ export default function Menu({ visible, onClose }: MenuProps) {
     <Modal visible={visible} animationType="none" transparent>
       <View style={styles.overlay}>
         <Pressable style={styles.backdrop} onPress={onClose} />
-        <Animated.View style={[styles.menu, { transform: [{ translateX: slideAnim }] }]}>
+        <Animated.View
+          style={[styles.menu, { transform: [{ translateX: slideAnim }] }]}
+        >
           <View style={styles.header}>
             <Text style={styles.menuTitle}>Menu</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -75,8 +85,21 @@ export default function Menu({ visible, onClose }: MenuProps) {
           <MenuItem route="/" title="Home" icon="home-outline" />
           <MenuItem route="/content" title="Trilhas" icon="map-outline" />
           <MenuItem route="/notice" title="Notícias" icon="newspaper-outline" />
-          <MenuItem route="/vestibular" title="Vestibular" icon="school-outline" />
-          <MenuItem route="/about" title="Sobre" icon="information-circle-outline" />
+          <MenuItem
+            route="/vestibular"
+            title="Vestibular"
+            icon="school-outline"
+          />
+          <MenuItem
+            route="/analise"
+            title="Análise de Dados"
+            icon="analytics-outline"
+          />
+          <MenuItem
+            route="/about"
+            title="Sobre"
+            icon="information-circle-outline"
+          />
           <MenuItem route="/contact" title="Contato" icon="mail-outline" />
           <MenuItem route="/logout" title="Logout" icon="log-in-outline" />
         </Animated.View>
@@ -90,7 +113,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row-reverse", // Alterado de "row" para "row-reverse"
     backgroundColor: "rgba(0,0,0,0.4)",
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
@@ -110,9 +133,9 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingTop: 24,
     paddingBottom: 20,
@@ -132,8 +155,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 15,
     paddingHorizontal: 20,
   },

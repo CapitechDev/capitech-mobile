@@ -1,11 +1,17 @@
 import Mensagem from "../model/Mensagem";
+import obterSugestao from "./sugestao";
 
 export default async function conversar(
   chatId: string,
   mensagem: Mensagem
 ): Promise<string | null> {
-  const webhookUrl = "https://capitech.app.n8n.cloud/webhook/chat";
+  const webhookUrl = "https://capitech2.app.n8n.cloud/webhook/capibot";
   if (!webhookUrl) return null;
+
+  // Chama a função de sugestão em paralelo (sem await para não bloquear)
+  obterSugestao(mensagem.texto).catch((error) => {
+    console.error("Erro ao obter sugestão:", error);
+  });
 
   const resposta = await fetch(webhookUrl, {
     method: "POST",
