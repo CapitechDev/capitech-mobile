@@ -15,6 +15,7 @@ import {
   View,
 } from "react-native";
 import { useAuth } from "../../../hooks/useAuth";
+import { mobileApi } from "../../../services/api";
 
 export default function Login() {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
@@ -44,17 +45,44 @@ export default function Login() {
   };
 
   const handleLogin = async (email: string, password: string) => {
+    setLoading(true);
     try {
-      const response = await axios.post("http://10.68.153.112:4000/users-mobile/login", {
+      console.log("🔑 Tentando fazer login com:", { email });
+      const response = await mobileApi.post("/users-mobile/login", {
         email,
         password,
       });
-      const token = response.data.token;
-      login(token);
-      router.replace("/");
+      
+      console.log("✅ Resposta completa do login:", response);
+      console.log("📊 Status da resposta:", response.status);
+      console.log("🎯 Data da resposta:", response.data);
+      
+      if (response.status === 200 || response.status === 201) {
+        const token = response.data.token;
+        console.log("🔐 Token recebido:", token ? "✅ Token presente" : "❌ Token ausente");
+        
+        if (token) {
+          await login(token);
+          console.log("🚀 Redirecionando para página principal...");
+          router.replace("/");
+        } else {
+          Alert.alert("Erro", "Token não recebido do servidor");
+        }
+      } else {
+        Alert.alert("Erro", `Status inesperado: ${response.status}`);
+      }
     } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      Alert.alert("Erro", "Ocorreu um erro ao fazer login");
+      console.error("❌ Erro completo do login:", error);
+      if (axios.isAxiosError(error)) {
+        console.error("📋 Response data:", error.response?.data);
+        console.error("📊 Response status:", error.response?.status);
+        const message = error.response?.data?.message || error.response?.data?.error || "Erro desconhecido";
+        Alert.alert("Erro", `Erro ao fazer login: ${message}`);
+      } else {
+        Alert.alert("Erro", "Ocorreu um erro de conexão");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 

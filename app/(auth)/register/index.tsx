@@ -2,7 +2,8 @@ import axios from 'axios';
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { mobileApi } from "../../../services/api";
 
 export default function Register() {
     const [focusedInput, setFocusedInput] = useState<string | null>(null);
@@ -29,7 +30,8 @@ export default function Register() {
 
         setLoading(true);
         try {
-            const response = await axios.post('http://10.68.153.112:4000/users-mobile/register', {
+            console.log("📝 Tentando registrar usuário:", { name: formData.name, email: formData.email });
+            const response = await mobileApi.post("/users-mobile/register", {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password,

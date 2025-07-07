@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { mobileApi } from "../../../services/api";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -43,8 +44,8 @@ export default function ForgotPassword() {
         email,
       };
 
-      const response = await axios.post(
-        "http://192.168.1.8:4000/users-mobile/forgot-password",
+      const response = await mobileApi.post(
+        "/users-mobile/forgot-password",
         data
       );
       //await new Promise((resolve) => setTimeout(resolve, 500));
@@ -87,8 +88,8 @@ export default function ForgotPassword() {
         password: password.trim(),
       };
 
-      const response = await axios.post(
-        "http://192.168.1.8:4000/users-mobile/reset-password",
+      const response = await mobileApi.post(
+        "/users-mobile/reset-password",
         data
       );
 
