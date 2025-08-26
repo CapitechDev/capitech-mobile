@@ -1,0 +1,127 @@
+@startuml Casos de Uso - Login e Classificação de Trilhas
+
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam actorBackgroundColor #E3F2FD
+skinparam usecaseBackgroundColor #F8F9FA
+skinparam usecaseBorderColor #2F4172
+
+title Casos de Uso - Sistema de Login e Classificação de Trilhas
+
+left to right direction
+
+' ============= ATORES =============
+
+actor "Usuário\nNão Autenticado" as UserGuest
+actor "Usuário\nAutenticado" as UserAuth
+actor "Administrador" as Admin
+
+' ============= SISTEMA =============
+
+rectangle "Sistema Capitech Mobile" {
+    
+    ' === CASOS DE USO DE AUTENTICAÇÃO ===
+    package "Autenticação" {
+        usecase "Fazer Login" as UC1
+        usecase "Cadastrar Conta" as UC2
+        usecase "Recuperar Senha" as UC3
+        usecase "Fazer Logout" as UC4
+        usecase "Atualizar Perfil" as UC5
+    }
+    
+    ' === CASOS DE USO DE TRILHAS ===
+    package "Navegação e Trilhas" {
+        usecase "Visualizar Lista\nde Trilhas" as UC6
+        usecase "Filtrar Trilhas\nPor Categoria" as UC7
+        usecase "Buscar Trilhas" as UC8
+        usecase "Visualizar Detalhes\nda Trilha" as UC9
+        usecase "Acompanhar Progresso\nna Trilha" as UC10
+        usecase "Marcar Trilha\ncomo Concluída" as UC11
+    }
+    
+    ' === CASOS DE USO DE CLASSIFICAÇÃO ===
+    package "Classificação e Analytics" {
+        usecase "Classificar Trilhas\nPor Nível" as UC12
+        usecase "Classificar Trilhas\nPor Popularidade" as UC13
+        usecase "Ver Trilhas\nRecomendadas" as UC14
+        usecase "Ver Histórico\nde Visitas" as UC15
+        usecase "Gerar Relatório\nde Progresso" as UC16
+    }
+    
+    ' === CASOS DE USO ADMINISTRATIVOS ===
+    package "Administração" {
+        usecase "Criar Nova Trilha" as UC17
+        usecase "Editar Trilha" as UC18
+        usecase "Excluir Trilha" as UC19
+        usecase "Gerenciar Usuários" as UC20
+        usecase "Ver Analytics\ndo Sistema" as UC21
+    }
+}
+
+' ============= RELACIONAMENTOS DOS USUÁRIOS =============
+
+' Usuário Não Autenticado
+UserGuest --> UC1 : executa
+UserGuest --> UC2 : executa
+UserGuest --> UC3 : executa
+UserGuest --> UC6 : executa
+UserGuest --> UC7 : executa
+UserGuest --> UC8 : executa
+UserGuest --> UC9 : executa
+UserGuest --> UC12 : executa
+UserGuest --> UC13 : executa
+
+' Usuário Autenticado
+UserAuth --> UC4 : executa
+UserAuth --> UC5 : executa
+UserAuth --> UC6 : executa
+UserAuth --> UC7 : executa
+UserAuth --> UC8 : executa
+UserAuth --> UC9 : executa
+UserAuth --> UC10 : executa
+UserAuth --> UC11 : executa
+UserAuth --> UC12 : executa
+UserAuth --> UC13 : executa
+UserAuth --> UC14 : executa
+UserAuth --> UC15 : executa
+UserAuth --> UC16 : executa
+
+' Administrador
+Admin --> UC17 : executa
+Admin --> UC18 : executa
+Admin --> UC19 : executa
+Admin --> UC20 : executa
+Admin --> UC21 : executa
+
+' ============= RELACIONAMENTOS ENTRE CASOS DE USO =============
+
+' Includes
+UC1 ..> UC6 : <<include>>
+UC2 ..> UC1 : <<include>>
+UC10 ..> UC9 : <<include>>
+UC11 ..> UC10 : <<include>>
+UC14 ..> UC12 : <<include>>
+UC14 ..> UC13 : <<include>>
+UC16 ..> UC15 : <<include>>
+
+' Extends
+UC7 ..> UC6 : <<extend>>
+UC8 ..> UC6 : <<extend>>
+UC12 ..> UC6 : <<extend>>
+UC13 ..> UC6 : <<extend>>
+
+' ============= NOTAS =============
+
+note top of UC1 : Autentica usuário com\nemail e senha
+
+note top of UC6 : Lista todas as trilhas\ndisponíveis no sistema
+
+note right of UC10 : Registra tempo de visualização\ne percentual de conclusão
+
+note right of UC12 : Organiza trilhas por:\n- Iniciante\n- Intermediário\n- Avançado
+
+note bottom of UC13 : Ordena trilhas por:\n- Número de visualizações\n- Avaliações\n- Data de criação
+
+note left of UC17 : Apenas administradores\npodem criar trilhas
+
+@enduml

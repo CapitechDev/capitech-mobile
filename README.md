@@ -103,6 +103,7 @@ Padronizamos os commits para manter um histórico de desenvolvimento claro e org
 - **Figma:** [Clique aqui](https://www.figma.com/file/FnzEv4aPYWLKyNBSckPGTA?locale=en&type=design)
 - **Documentação da API:** [Clique aqui](readme/docAPI.md)
 - **Documentação de IHC:** [Clique aqui](readme/ihcDoc.pdf)
+- **📊 Diagramas UML (Login e Trilhas):** [Clique aqui](readme/UML-Documentacao.md)
 
 🔝 [Voltar ao topo](#topo)
 

@@ -1,0 +1,188 @@
+@startuml Classes - Login e Classificação de Trilhas
+
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam classBackgroundColor #F8F9FA
+skinparam classArrowColor #2F4172
+skinparam classBorderColor #2F4172
+
+title Classes do Sistema - Login e Classificação de Trilhas
+
+' ============= ENTIDADES PRINCIPAIS =============
+
+class Usuario {
+    -id: string
+    -email: string
+    -senha: string (hash)
+    -nome: string
+    -dataCriacao: Date
+    -dataUltimoLogin: Date
+    -ativo: boolean
+    --
+    +autenticar(email: string, senha: string): boolean
+    +atualizarPerfil(dados: object): void
+    +obterTrilhasVisualizadas(): Trilha[]
+    +obterProgressoGeral(): number
+}
+
+class Trilha {
+    -id: string
+    -nome: string
+    -subtitulo: string
+    -categoria: string
+    -nivel: string
+    -descricao: string
+    -videoDescricao: string
+    -videoTitulo: string
+    -referencias: string
+    -iframeReferencias: string
+    -caminhoImagem: string
+    -dataCriacao: Date
+    -ativa: boolean
+    --
+    +obterDetalhes(): object
+    +classificarPorCategoria(): string
+    +obterNumeroPessoas(): number
+    +calcularTempoMedio(): number
+}
+
+class VisitaTrilha {
+    -id: string
+    -usuarioId: string
+    -trilhaId: string
+    -dataVisita: Date
+    -tempoVisualizacao: number
+    -concluida: boolean
+    -dataConclusao: Date
+    -progresso: number
+    --
+    +marcarComoConcluida(): void
+    +atualizarProgresso(percentual: number): void
+    +calcularTempoVisualizacao(): number
+}
+
+class CategoriaTriha {
+    -id: string
+    -nome: string
+    -descricao: string
+    -cor: string
+    -icone: string
+    -ordem: number
+    --
+    +obterTrilhas(): Trilha[]
+    +contarTrilhas(): number
+}
+
+class SessaoUsuario {
+    -id: string
+    -usuarioId: string
+    -token: string
+    -dataInicio: Date
+    -dataExpiracao: Date
+    -dispositivo: string
+    -ativa: boolean
+    --
+    +validarToken(): boolean
+    +renovarSessao(): void
+    +encerrarSessao(): void
+}
+
+' ============= SERVIÇOS =============
+
+class ServicoAutenticacao {
+    +login(email: string, senha: string): SessaoUsuario
+    +logout(token: string): void
+    +validarToken(token: string): boolean
+    +registrarUsuario(dados: object): Usuario
+    +recuperarSenha(email: string): void
+}
+
+class ServicoTrilhas {
+    +listarTrilhas(): Trilha[]
+    +obterTrilhaPorId(id: string): Trilha
+    +classificarTrilhas(criterio: string): Trilha[]
+    +buscarTrilhas(termo: string): Trilha[]
+    +obterTrilhasPorCategoria(categoria: string): Trilha[]
+}
+
+class ServicoAnalytics {
+    +registrarVisita(usuarioId: string, trilhaId: string): VisitaTrilha
+    +obterEstatisticasUsuario(usuarioId: string): object
+    +obterEstatisticasTrilha(trilhaId: string): object
+    +gerarRelatorioProgresso(usuarioId: string): object
+}
+
+class ClassificadorTrilhas {
+    +classificarPorNivel(trilhas: Trilha[]): Map<string, Trilha[]>
+    +classificarPorCategoria(trilhas: Trilha[]): Map<string, Trilha[]>
+    +ordenarPorPopularidade(trilhas: Trilha[]): Trilha[]
+    +filtrarPorProgresso(trilhas: Trilha[], usuarioId: string): Trilha[]
+}
+
+' ============= RELACIONAMENTOS =============
+
+Usuario ||--o{ VisitaTrilha : "possui"
+Trilha ||--o{ VisitaTrilha : "recebe"
+Usuario ||--o{ SessaoUsuario : "tem"
+CategoriaTriha ||--o{ Trilha : "contém"
+
+Usuario --> ServicoAutenticacao : "autenticado por"
+Trilha --> ServicoTrilhas : "gerenciada por"
+VisitaTrilha --> ServicoAnalytics : "registrada por"
+
+ServicoTrilhas --> ClassificadorTrilhas : "usa"
+ServicoAnalytics --> VisitaTrilha : "analisa"
+
+' ============= COMPONENTES MOBILE =============
+
+package "Interface Mobile" {
+    class TelaLogin {
+        +email: string
+        +senha: string
+        +carregando: boolean
+        +erro: string
+        --
+        +realizarLogin(): void
+        +validarFormulario(): boolean
+        +exibirErro(mensagem: string): void
+    }
+
+    class TelaTrilhas {
+        +trilhas: Trilha[]
+        +filtroAtivo: string
+        +carregando: boolean
+        --
+        +carregarTrilhas(): void
+        +filtrarTrilhas(categoria: string): void
+        +navegarParaTrilha(trilha: Trilha): void
+    }
+
+    class TelaDetalheTrilha {
+        +trilha: Trilha
+        +progresso: VisitaTrilha
+        +carregando: boolean
+        --
+        +carregarDetalhes(): void
+        +marcarProgresso(): void
+        +concluirTrilha(): void
+    }
+}
+
+TelaLogin --> ServicoAutenticacao : "usa"
+TelaTrilhas --> ServicoTrilhas : "usa"
+TelaTrilhas --> ClassificadorTrilhas : "usa"
+TelaDetalheTrilha --> ServicoAnalytics : "usa"
+
+' ============= NOTAS EXPLICATIVAS =============
+
+note top of Usuario : Representa os usuários do sistema\ncom suas credenciais e histórico
+
+note top of Trilha : Trilhas de aprendizagem\ncom conteúdo educacional
+
+note right of VisitaTrilha : Registra cada visita e progresso\ndo usuário nas trilhas
+
+note bottom of ClassificadorTrilhas : Responsável por classificar\ne organizar as trilhas
+
+note left of ServicoAnalytics : Coleta e analisa dados\nde uso das trilhas
+
+@enduml

@@ -1,0 +1,302 @@
+@startuml Sistema Capitech Mobile - Login e Classificação de Trilhas
+
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam classBackgroundColor #F8F9FA
+skinparam classArrowColor #2F4172
+skinparam classBorderColor #2F4172
+
+title Sistema Capitech Mobile\nLogin e Classificação de Trilhas de Usuário
+
+' ============= ENTIDADES PRINCIPAIS =============
+
+package "Entidades do Sistema" {
+    class User {
+        -_id: string
+        -email: string
+        -password: string
+        -name: string
+        -createdAt: Date
+        -updatedAt: Date
+        +login(email: string, password: string): Promise<AuthResponse>
+        +register(userData: UserRegistrationData): Promise<User>
+        +updateProfile(data: UserUpdateData): Promise<User>
+        +deleteAccount(): Promise<void>
+    }
+
+    class Trail {
+        -_id: string
+        -name: string
+        -subtitle: string
+        -description: string
+        -video_description: string
+        -video_title: string
+        -references: string
+        -iframe_references: string
+        -image_path: string
+        -createdAt: Date
+        -updatedAt: Date
+        +getTrailDetails(): TrailDetails
+        +updateTrail(data: TrailUpdateData): Promise<Trail>
+        +deleteTrail(): Promise<void>
+    }
+
+    class UserTrailProgress {
+        -_id: string
+        -userId: string
+        -trailId: string
+        -completed: boolean
+        -completedAt: Date
+        -startedAt: Date
+        -timeSpent: number
+        +markAsCompleted(): void
+        +updateProgress(progress: number): void
+        +getProgressPercentage(): number
+    }
+}
+
+' ============= TIPOS E INTERFACES =============
+
+package "Tipos e Interfaces" {
+    class AuthResponse {
+        +success: boolean
+        +message: string
+        +token: string
+        +user: User
+    }
+
+    class TrailsResponse {
+        +success: boolean
+        +message: string
+        +data: Trail[]
+    }
+
+    class UserRegistrationData {
+        +email: string
+        +password: string
+        +name: string
+        +adminCode: string
+    }
+
+    class UserUpdateData {
+        +email?: string
+        +password?: string
+        +name?: string
+    }
+
+    class TrailUpdateData {
+        +name?: string
+        +subtitle?: string
+        +description?: string
+        +video_description?: string
+        +video_title?: string
+        +references?: string
+        +iframe_references?: string
+        +image_path?: string
+    }
+}
+
+' ============= COMPONENTES DA APLICAÇÃO MOBILE =============
+
+package "Componentes Mobile (React Native)" {
+    class App {
+        +menuVisible: boolean
+        +setMenuVisible(visible: boolean): void
+        +render(): JSX.Element
+    }
+
+    class HomeScreen {
+        +navigateToTrails(): void
+        +navigateToNotices(): void
+        +navigateToContact(): void
+        +navigateToVestibular(): void
+        +navigateToAbout(): void
+        +render(): JSX.Element
+    }
+
+    class LoginScreen {
+        +email: string
+        +password: string
+        +loading: boolean
+        +error: string
+        +handleLogin(): Promise<void>
+        +handleRegister(): void
+        +render(): JSX.Element
+    }
+
+    class RegisterScreen {
+        +formData: UserRegistrationData
+        +loading: boolean
+        +errors: ValidationErrors
+        +handleSubmit(): Promise<void>
+        +validateForm(): boolean
+        +render(): JSX.Element
+    }
+
+    class ContentIndex {
+        +trails: Trail[]
+        +loading: boolean
+        +fetchTrails(): Promise<void>
+        +navigateToTrail(trail: Trail): void
+        +render(): JSX.Element
+    }
+
+    class TrailDescription {
+        +trail: Trail
+        +userProgress: UserTrailProgress
+        +loadTrailData(): void
+        +markTrailAsCompleted(): void
+        +updateProgress(): void
+        +render(): JSX.Element
+    }
+
+    class UserProfile {
+        +user: User
+        +trails: Trail[]
+        +progress: UserTrailProgress[]
+        +loadUserData(): void
+        +getCompletedTrails(): Trail[]
+        +getInProgressTrails(): Trail[]
+        +render(): JSX.Element
+    }
+}
+
+' ============= SERVIÇOS E API =============
+
+package "Serviços e API" {
+    class AuthService {
+        +login(email: string, password: string): Promise<AuthResponse>
+        +register(userData: UserRegistrationData): Promise<AuthResponse>
+        +logout(): void
+        +getCurrentUser(): User | null
+        +getAuthToken(): string | null
+        +setAuthToken(token: string): void
+        +isAuthenticated(): boolean
+    }
+
+    class TrailService {
+        +getTrails(): Promise<TrailsResponse>
+        +getTrailById(id: string): Promise<Trail>
+        +createTrail(data: TrailUpdateData): Promise<Trail>
+        +updateTrail(id: string, data: TrailUpdateData): Promise<Trail>
+        +deleteTrail(id: string): Promise<void>
+    }
+
+    class UserService {
+        +updateUser(data: UserUpdateData): Promise<User>
+        +deleteUser(): Promise<void>
+        +getUserProfile(): Promise<User>
+        +getUserProgress(): Promise<UserTrailProgress[]>
+        +updateTrailProgress(trailId: string, progress: number): Promise<void>
+    }
+
+    class ApiClient {
+        +baseURL: string
+        +headers: Record<string, string>
+        +get<T>(url: string): Promise<ApiResponse<T>>
+        +post<T>(url: string, data: any): Promise<ApiResponse<T>>
+        +put<T>(url: string, data: any): Promise<ApiResponse<T>>
+        +delete<T>(url: string): Promise<ApiResponse<T>>
+        +setAuthToken(token: string): void
+    }
+}
+
+' ============= NAVEGAÇÃO E ESTADO =============
+
+package "Navegação e Estado" {
+    class Router {
+        +navigate(route: string, params?: any): void
+        +goBack(): void
+        +getCurrentRoute(): string
+        +push(route: string, params?: any): void
+    }
+
+    class AuthContext {
+        +user: User | null
+        +isAuthenticated: boolean
+        +loading: boolean
+        +login(email: string, password: string): Promise<void>
+        +logout(): void
+        +register(userData: UserRegistrationData): Promise<void>
+    }
+
+    class TrailContext {
+        +trails: Trail[]
+        +currentTrail: Trail | null
+        +userProgress: UserTrailProgress[]
+        +loading: boolean
+        +fetchTrails(): Promise<void>
+        +setCurrentTrail(trail: Trail): void
+        +updateProgress(trailId: string, progress: number): Promise<void>
+    }
+}
+
+' ============= RELACIONAMENTOS =============
+
+' Relacionamentos entre entidades
+User ||--o{ UserTrailProgress : "tem progresso em"
+Trail ||--o{ UserTrailProgress : "é acompanhada por"
+
+' Relacionamentos com tipos
+User ..> AuthResponse : "retorna"
+Trail ..> TrailsResponse : "contido em"
+User ..> UserRegistrationData : "criado com"
+User ..> UserUpdateData : "atualizado com"
+Trail ..> TrailUpdateData : "atualizado com"
+
+' Relacionamentos dos componentes mobile
+App *-- HomeScreen
+App *-- LoginScreen
+App *-- RegisterScreen
+App *-- ContentIndex
+App *-- TrailDescription
+App *-- UserProfile
+
+HomeScreen --> Router : "usa"
+LoginScreen --> AuthService : "usa"
+RegisterScreen --> AuthService : "usa"
+ContentIndex --> TrailService : "usa"
+TrailDescription --> TrailService : "usa"
+TrailDescription --> UserService : "usa"
+UserProfile --> UserService : "usa"
+
+' Relacionamentos dos serviços
+AuthService --> ApiClient : "usa"
+TrailService --> ApiClient : "usa"
+UserService --> ApiClient : "usa"
+
+AuthService ..> AuthResponse : "retorna"
+TrailService ..> TrailsResponse : "retorna"
+TrailService ..> Trail : "manipula"
+UserService ..> User : "manipula"
+UserService ..> UserTrailProgress : "manipula"
+
+' Relacionamentos com contextos
+LoginScreen --> AuthContext : "usa"
+RegisterScreen --> AuthContext : "usa"
+ContentIndex --> TrailContext : "usa"
+TrailDescription --> TrailContext : "usa"
+UserProfile --> AuthContext : "usa"
+UserProfile --> TrailContext : "usa"
+
+AuthContext --> AuthService : "usa"
+TrailContext --> TrailService : "usa"
+TrailContext --> UserService : "usa"
+
+' ============= NOTAS =============
+
+note top of User : Usuário do sistema\nCom autenticação e gestão de perfil
+
+note top of Trail : Trilha de aprendizagem\nCom conteúdo educacional estruturado
+
+note top of UserTrailProgress : Acompanha o progresso\ndo usuário nas trilhas
+
+note right of AuthService : Gerencia autenticação\ne autorização de usuários
+
+note right of TrailService : Gerencia operações\ncom trilhas de aprendizagem
+
+note bottom of ContentIndex : Tela principal para\nnavegação entre trilhas
+
+note bottom of TrailDescription : Exibe detalhes da trilha\ne permite interação do usuário
+
+@enduml

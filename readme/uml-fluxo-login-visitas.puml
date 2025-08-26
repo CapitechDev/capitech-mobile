@@ -1,0 +1,73 @@
+@startuml Fluxo de Login e Classificação de Visitas
+
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam actorBackgroundColor #E3F2FD
+skinparam participantBackgroundColor #F8F9FA
+skinparam sequenceArrowColor #2F4172
+
+title Fluxo de Login e Classificação de Visitas - Capitech Mobile
+
+actor "Usuário" as User
+participant "App Mobile" as App
+participant "Tela Login" as Login
+participant "AuthService" as Auth
+participant "API Backend" as API
+participant "Tela Trilhas" as Trails
+participant "TrailService" as TrailSvc
+participant "Banco de Dados" as DB
+
+== Processo de Login ==
+
+User -> App: Acessa aplicativo
+App -> Login: Exibe tela de login
+
+User -> Login: Insere email e senha
+Login -> Auth: login(email, password)
+Auth -> API: POST /login
+API -> DB: Valida credenciais
+DB -> API: Retorna dados do usuário
+API -> Auth: AuthResponse (token + user)
+Auth -> Login: Usuario autenticado
+Login -> App: Redireciona para home
+
+== Navegação para Trilhas ==
+
+User -> App: Clica em "Trilhas Aprendizagem"
+App -> Trails: Navega para ContentIndex
+
+== Classificação e Listagem de Trilhas ==
+
+Trails -> TrailSvc: fetchTrails()
+TrailSvc -> API: GET /trilhas
+API -> DB: Busca todas as trilhas
+DB -> API: Lista de trilhas
+API -> TrailSvc: TrailsResponse
+TrailSvc -> Trails: trails[]
+
+Trails -> Trails: Classifica trilhas por categoria
+note right: Trilhas são classificadas por:\n- Nome/Título\n- Categoria (subtitle)\n- Nível de dificuldade\n- Área de conhecimento
+
+== Visualização de Trilha Específica ==
+
+User -> Trails: Seleciona uma trilha
+Trails -> App: Navega para TrailDescription
+App -> TrailSvc: getTrailById(id)
+TrailSvc -> API: GET /trilhas/{id}
+API -> DB: Busca trilha específica
+DB -> API: Dados da trilha
+API -> TrailSvc: Trail
+TrailSvc -> App: Exibe conteúdo da trilha
+
+== Registro de Visita/Progresso ==
+
+User -> App: Visualiza conteúdo da trilha
+App -> Auth: getUserId()
+App -> TrailSvc: updateTrailProgress(userId, trailId)
+TrailSvc -> API: POST /user/progress
+API -> DB: Registra visita/progresso
+DB -> API: Confirmação
+API -> TrailSvc: Sucesso
+TrailSvc -> App: Progresso atualizado
+
+@enduml
