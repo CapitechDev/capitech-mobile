@@ -15,7 +15,7 @@ import {
   View,
 } from "react-native";
 import { useAuth } from "../../../hooks/useAuth";
-import { mobileApi } from "../../../services/api";
+import { api } from "../../../services/api";
 
 export default function Login() {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
@@ -48,19 +48,22 @@ export default function Login() {
     setLoading(true);
     try {
       console.log("🔑 Tentando fazer login com:", { email });
-      const response = await mobileApi.post("/users-mobile/login", {
+      const response = await api.post("/auth/login", {
         email,
         password,
       });
-      
+
       console.log("✅ Resposta completa do login:", response);
       console.log("📊 Status da resposta:", response.status);
       console.log("🎯 Data da resposta:", response.data);
-      
+
       if (response.status === 200 || response.status === 201) {
         const token = response.data.token;
-        console.log("🔐 Token recebido:", token ? "✅ Token presente" : "❌ Token ausente");
-        
+        console.log(
+          "🔐 Token recebido:",
+          token ? "✅ Token presente" : "❌ Token ausente"
+        );
+
         if (token) {
           await login(token);
           console.log("🚀 Redirecionando para página principal...");
@@ -76,7 +79,10 @@ export default function Login() {
       if (axios.isAxiosError(error)) {
         console.error("📋 Response data:", error.response?.data);
         console.error("📊 Response status:", error.response?.status);
-        const message = error.response?.data?.message || error.response?.data?.error || "Erro desconhecido";
+        const message =
+          error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Erro desconhecido";
         Alert.alert("Erro", `Erro ao fazer login: ${message}`);
       } else {
         Alert.alert("Erro", "Ocorreu um erro de conexão");
@@ -119,7 +125,9 @@ export default function Login() {
               <TextInput
                 style={[
                   styles.input,
-                  { borderColor: focusedInput === "email" ? "#2196F3" : "#FFF" },
+                  {
+                    borderColor: focusedInput === "email" ? "#2196F3" : "#FFF",
+                  },
                 ]}
                 placeholder="Digite seu E-mail"
                 placeholderTextColor="#555555"
@@ -137,7 +145,8 @@ export default function Login() {
                 style={[
                   styles.input,
                   {
-                    borderColor: focusedInput === "password" ? "#2196F3" : "#FFF",
+                    borderColor:
+                      focusedInput === "password" ? "#2196F3" : "#FFF",
                   },
                 ]}
                 placeholder="Digite sua senha"
@@ -268,5 +277,3 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-
-
