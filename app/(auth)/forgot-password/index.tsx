@@ -13,7 +13,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { mobileApi } from "../../../services/api";
+import { api } from "../../../services/api";
+import { ScrollView } from "react-native";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -44,10 +45,7 @@ export default function ForgotPassword() {
         email,
       };
 
-      const response = await mobileApi.post(
-        "/users-mobile/forgot-password",
-        data
-      );
+      const response = await api.post("/auth/forgot-password", data);
       //await new Promise((resolve) => setTimeout(resolve, 500));
       console.log("Resposta do backend:", response.data);
 
@@ -57,19 +55,12 @@ export default function ForgotPassword() {
         [{ text: "OK" }]
       );
     } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        console.log("Erro do backend:", error.response?.data);
-        Alert.alert(
-          "Erro",
-          error.response?.data?.message || "Erro desconhecido no servidor"
-        );
-      } else {
-        console.log("Erro de conexão:", error);
-        Alert.alert(
-          "Erro",
-          "Ocorreu um erro ao processar sua solicitação. Verifique sua conexão."
-        );
-      }
+      console.log("Erro ao enviar email:", error);
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Erro ao processar solicitação";
+      Alert.alert("Erro", String(message));
     } finally {
       setLoading(false);
     }
@@ -85,33 +76,23 @@ export default function ForgotPassword() {
     try {
       const data = {
         token: token.trim(),
-        password: password.trim(),
+        newPassword: password.trim(),
       };
 
-      const response = await mobileApi.post(
-        "/users-mobile/reset-password",
-        data
-      );
+      const response = await api.post("/auth/reset-password", data);
 
       console.log("Resposta do backend:", response.data);
 
       Alert.alert("Sucesso", "Sua senha foi atualizada com sucesso!", [
         { text: "OK", onPress: () => router.push("/login") },
       ]);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Erro do backend:", error.response?.data);
-        Alert.alert(
-          "Erro",
-          error.response?.data?.message || "Erro desconhecido no servidor"
-        );
-      } else {
-        console.error("Erro de conexão:", error);
-        Alert.alert(
-          "Erro",
-          "Ocorreu um erro ao processar sua solicitação. Verifique sua conexão."
-        );
-      }
+    } catch (error: any) {
+      console.error("Erro ao resetar senha:", error);
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Erro ao processar solicitação";
+      console.error("Erro", String(message));
     } finally {
       setLoading(false);
     }
@@ -124,89 +105,94 @@ export default function ForgotPassword() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
-          <View style={styles.content}>
-            <View style={styles.headerContainer}>
-              <Text style={styles.title}>Recuperar Senha</Text>
-              <Text style={styles.subtitle}>
-                Digite seu email cadastrado para receber as instruções de
-                recuperação de senha
-              </Text>
-            </View>
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.content}>
+              <View style={styles.headerContainer}>
+                <Text style={styles.title}>Recuperar Senha</Text>
+                <Text style={styles.subtitle}>
+                  Digite seu email cadastrado para receber as instruções de
+                  recuperação de senha
+                </Text>
+              </View>
 
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    borderColor: focusedInput === "email" ? "#2196F3" : "#FFF",
-                  },
-                ]}
-                placeholder="Digite seu E-mail"
-                placeholderTextColor="#555555"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
-                onFocus={() => setFocusedInput("email")}
-                onBlur={() => setFocusedInput(null)}
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      borderColor:
+                        focusedInput === "email" ? "#2196F3" : "#FFF",
+                    },
+                  ]}
+                  placeholder="Digite seu E-mail"
+                  placeholderTextColor="#555555"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  value={email}
+                  onChangeText={setEmail}
+                  onFocus={() => setFocusedInput("email")}
+                  onBlur={() => setFocusedInput(null)}
+                />
 
-              <TouchableOpacity
-                style={styles.resetButton}
-                onPress={handleEmailPassword} // Validação ocorre aqui
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#FFF" />
-                ) : (
-                  <Text style={styles.resetButtonText}>Enviar instruções</Text>
-                )}
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.resetButton}
+                  onPress={handleEmailPassword} // Validação ocorre aqui
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <ActivityIndicator color="#FFF" />
+                  ) : (
+                    <Text style={styles.resetButtonText}>
+                      Enviar instruções
+                    </Text>
+                  )}
+                </TouchableOpacity>
 
-              <TextInput
-                style={styles.input}
-                placeholder="Digite o token"
-                placeholderTextColor="#555555"
-                autoCapitalize="none"
-                value={token}
-                onChangeText={setToken}
-                onFocus={() => setFocusedInput("token")}
-                onBlur={() => setFocusedInput(null)}
-              />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Digite o token"
+                  placeholderTextColor="#555555"
+                  autoCapitalize="none"
+                  value={token}
+                  onChangeText={setToken}
+                  onFocus={() => setFocusedInput("token")}
+                  onBlur={() => setFocusedInput(null)}
+                />
 
-              <TextInput
-                style={styles.input}
-                placeholder="Digite sua nova senha"
-                placeholderTextColor="#555555"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-                onFocus={() => setFocusedInput("newPassword")}
-                onBlur={() => setFocusedInput(null)}
-              />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Digite sua nova senha"
+                  placeholderTextColor="#555555"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={setPassword}
+                  onFocus={() => setFocusedInput("newPassword")}
+                  onBlur={() => setFocusedInput(null)}
+                />
 
-              <TouchableOpacity
-                style={styles.resetButton}
-                onPress={handleResetPassword}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#FFF" />
-                ) : (
-                  <Text style={styles.resetButtonText}>Atualizar senha</Text>
-                )}
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.resetButton}
+                  onPress={handleResetPassword}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <ActivityIndicator color="#FFF" />
+                  ) : (
+                    <Text style={styles.resetButtonText}>Atualizar senha</Text>
+                  )}
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.backButton}
-                onPress={handleBackToLogin}
-              >
-                <Text style={styles.backButtonText}>Voltar para login</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={handleBackToLogin}
+                >
+                  <Text style={styles.backButtonText}>Voltar para login</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );
@@ -220,6 +206,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#242424",
+    paddingVertical: 20,
   },
   content: {
     flex: 1,

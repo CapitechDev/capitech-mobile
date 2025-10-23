@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { useAuth } from "../../../hooks/useAuth";
 import { api } from "../../../services/api";
+import { ScrollView } from "react-native";
 
 export default function Login() {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
@@ -105,91 +106,94 @@ export default function Login() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
-          <View style={styles.content}>
-            <Image
-              source={require("../../../assets/capivara.png")}
-              style={styles.CapiImage}
-            />
-            <View style={styles.headerContainer}>
-              <Text style={styles.title}>
-                Olá, seja bem-vindo ao{"\n"}Capi.tech
-              </Text>
-              <Text style={styles.subtitle}>
-                Faça o login ou registre-se para poder manter salva toda a sua
-                jornada no site.
-              </Text>
-            </View>
-
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    borderColor: focusedInput === "email" ? "#2196F3" : "#FFF",
-                  },
-                ]}
-                placeholder="Digite seu E-mail"
-                placeholderTextColor="#555555"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={formData.email}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, email: text }))
-                }
-                onFocus={() => setFocusedInput("email")}
-                onBlur={() => setFocusedInput(null)}
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.content}>
+              <Image
+                source={require("../../../assets/capivara.png")}
+                style={styles.CapiImage}
               />
-
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    borderColor:
-                      focusedInput === "password" ? "#2196F3" : "#FFF",
-                  },
-                ]}
-                placeholder="Digite sua senha"
-                placeholderTextColor="#555555"
-                secureTextEntry={true}
-                value={formData.password}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, password: text }))
-                }
-                onFocus={() => setFocusedInput("password")}
-                onBlur={() => setFocusedInput(null)}
-              />
-
-              <TouchableOpacity
-                style={styles.loginButton}
-                onPress={handleLoginPress}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#FFF" />
-                ) : (
-                  <Text style={styles.loginButtonText}>Login</Text>
-                )}
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.registerButton}
-                onPress={handleRegister}
-              >
-                <Text style={styles.registerButtonText}>Registre-se</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.forgotPassword}
-                onPress={() => router.push("/forgot-password")}
-              >
-                <Text style={styles.forgotPasswordText}>
-                  Esqueci minha senha
+              <View style={styles.headerContainer}>
+                <Text style={styles.title}>
+                  Olá, seja bem-vindo ao{"\n"}Capi.tech
                 </Text>
-              </TouchableOpacity>
+                <Text style={styles.subtitle}>
+                  Faça o login ou registre-se para poder manter salva toda a sua
+                  jornada no site.
+                </Text>
+              </View>
+
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      borderColor:
+                        focusedInput === "email" ? "#2196F3" : "#FFF",
+                    },
+                  ]}
+                  placeholder="Digite seu E-mail"
+                  placeholderTextColor="#555555"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  value={formData.email}
+                  onChangeText={(text) =>
+                    setFormData((prev) => ({ ...prev, email: text }))
+                  }
+                  onFocus={() => setFocusedInput("email")}
+                  onBlur={() => setFocusedInput(null)}
+                />
+
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      borderColor:
+                        focusedInput === "password" ? "#2196F3" : "#FFF",
+                    },
+                  ]}
+                  placeholder="Digite sua senha"
+                  placeholderTextColor="#555555"
+                  secureTextEntry={true}
+                  value={formData.password}
+                  onChangeText={(text) =>
+                    setFormData((prev) => ({ ...prev, password: text }))
+                  }
+                  onFocus={() => setFocusedInput("password")}
+                  onBlur={() => setFocusedInput(null)}
+                />
+
+                <TouchableOpacity
+                  style={styles.loginButton}
+                  onPress={handleLoginPress}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <ActivityIndicator color="#FFF" />
+                  ) : (
+                    <Text style={styles.loginButtonText}>Login</Text>
+                  )}
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.registerButton}
+                  onPress={handleRegister}
+                >
+                  <Text style={styles.registerButtonText}>Registre-se</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.forgotPassword}
+                  onPress={() => router.push("/forgot-password")}
+                >
+                  <Text style={styles.forgotPasswordText}>
+                    Esqueci minha senha
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );
@@ -203,6 +207,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#242424",
+    paddingVertical: 20,
   },
   content: {
     flex: 1,
