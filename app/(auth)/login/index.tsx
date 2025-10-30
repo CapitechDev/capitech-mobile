@@ -14,9 +14,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { ScrollView } from "react-native";
+import Toast from "react-native-toast-message";
 import { useAuth } from "../../../hooks/useAuth";
 import { api } from "../../../services/api";
-import { ScrollView } from "react-native";
 
 export default function Login() {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
@@ -29,17 +30,44 @@ export default function Login() {
   const { login } = useAuth();
   const router = useRouter();
 
+  // Função padronizada para tratamento de erros
+  const handleError = (error: any, defaultMessage: string) => {
+    console.error("Erro:", error);
+    const message = error?.response?.data?.message || error?.message || defaultMessage;
+    Toast.show({
+      type: 'error',
+      text1: 'Erro',
+      text2: String(message),
+      position: 'top',
+    });
+  };
+
   const validateLoginForm = (email: string, password: string) => {
     if (!email || !password) {
-      Alert.alert("Erro", "Todos os campos são obrigatórios");
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Todos os campos são obrigatórios',
+        position: 'top',
+      });
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(email)) {
-      Alert.alert("Erro", "E-mail inválido");
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'E-mail inválido',
+        position: 'top',
+      });
       return false;
     }
     if (password.length < 6) {
-      Alert.alert("Erro", "Senha deve ter pelo menos 6 caracteres");
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Senha deve ter pelo menos 6 caracteres',
+        position: 'top',
+      });
       return false;
     }
     return true;
@@ -68,26 +96,31 @@ export default function Login() {
         if (token) {
           await login(token);
           console.log("🚀 Redirecionando para página principal...");
+          Toast.show({
+            type: 'success',
+            text1: 'Sucesso',
+            text2: 'Login realizado com sucesso!',
+            position: 'top',
+          });
           router.replace("/");
         } else {
-          Alert.alert("Erro", "Token não recebido do servidor");
+          Toast.show({
+            type: 'error',
+            text1: 'Erro',
+            text2: 'Token não recebido do servidor',
+            position: 'top',
+          });
         }
       } else {
-        Alert.alert("Erro", `Status inesperado: ${response.status}`);
+        Toast.show({
+          type: 'error',
+          text1: 'Erro',
+          text2: `Status inesperado: ${response.status}`,
+          position: 'top',
+        });
       }
     } catch (error) {
-      console.error("❌ Erro completo do login:", error);
-      if (axios.isAxiosError(error)) {
-        console.error("📋 Response data:", error.response?.data);
-        console.error("📊 Response status:", error.response?.status);
-        const message =
-          error.response?.data?.message ||
-          error.response?.data?.error ||
-          "Erro desconhecido";
-        Alert.alert("Erro", `Erro ao fazer login: ${message}`);
-      } else {
-        Alert.alert("Erro", "Ocorreu um erro de conexão");
-      }
+      handleError(error, "Erro ao fazer login");
     } finally {
       setLoading(false);
     }
@@ -195,6 +228,7 @@ export default function Login() {
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
+      <Toast />
     </SafeAreaView>
   );
 }

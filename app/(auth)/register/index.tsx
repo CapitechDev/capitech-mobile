@@ -2,6 +2,7 @@ import axios from "axios";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   SafeAreaView,
   ScrollView,
@@ -12,6 +13,7 @@ import {
   View,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import Toast from "react-native-toast-message";
 import { api } from "../../../services/api";
 
 export default function Register() {
@@ -26,6 +28,18 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  // Função padronizada para tratamento de erros
+  const handleError = (error: any, defaultMessage: string) => {
+    console.error("Erro:", error);
+    const message = error?.response?.data?.message || error?.message || defaultMessage;
+    Toast.show({
+      type: 'error',
+      text1: 'Erro',
+      text2: String(message),
+      position: 'top',
+    });
+  };
+
   const handleRegister = async () => {
     if (
       !formData.email ||
@@ -33,12 +47,22 @@ export default function Register() {
       !formData.password ||
       !formData.confirmPassword
     ) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos");
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Por favor, preencha todos os campos',
+        position: 'top',
+      });
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      Alert.alert("Erro", "As senhas não coincidem");
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'As senhas não coincidem',
+        position: 'top',
+      });
       return;
     }
 
@@ -55,16 +79,16 @@ export default function Register() {
       });
 
       if (response.status === 201) {
-        Alert.alert("Sucesso", "Registro feito com sucesso!", [
-          {
-            text: "Voltar para login",
-            onPress: handleBackToLogin,
-          },
-        ]);
+        Toast.show({
+          type: 'success',
+          text1: 'Sucesso',
+          text2: 'Registro feito com sucesso!',
+          position: 'top',
+        });
+        setTimeout(() => handleBackToLogin(), 1500);
       }
     } catch (error) {
-      console.error("Erro ao registrar:", error);
-      Alert.alert("Erro", "Ocorreu um erro ao registrar. Tente novamente.");
+      handleError(error, "Erro ao registrar usuário");
     } finally {
       setLoading(false);
     }
@@ -191,8 +215,13 @@ export default function Register() {
               <TouchableOpacity
                 style={styles.registerButton}
                 onPress={handleRegister}
+                disabled={loading}
               >
-                <Text style={styles.registerButtonText}>Registre-se</Text>
+                {loading ? (
+                  <ActivityIndicator color="#FFF" />
+                ) : (
+                  <Text style={styles.registerButtonText}>Registre-se</Text>
+                )}
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -205,6 +234,7 @@ export default function Register() {
           </View>
         </View>
       </ScrollView>
+      <Toast />
     </SafeAreaView>
   );
 }

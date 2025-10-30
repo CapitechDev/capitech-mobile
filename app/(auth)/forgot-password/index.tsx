@@ -13,8 +13,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { api } from "../../../services/api";
 import { ScrollView } from "react-native";
+import Toast from "react-native-toast-message";
+import { api } from "../../../services/api";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -28,14 +29,36 @@ export default function ForgotPassword() {
     return emailRegex.test(email);
   };
 
+  // Função padronizada para tratamento de erros
+  const handleError = (error: any, defaultMessage: string) => {
+    console.error("Erro:", error);
+    const message = error?.response?.data?.message || error?.message || defaultMessage;
+    Toast.show({
+      type: 'error',
+      text1: 'Erro',
+      text2: String(message),
+      position: 'top',
+    });
+  };
+
   const handleEmailPassword = async () => {
     if (!email) {
-      Alert.alert("Erro", "Por favor, digite seu email");
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Por favor, digite seu email',
+        position: 'top',
+      });
       return;
     }
 
     if (!validateEmail(email)) {
-      Alert.alert("Erro", "Por favor, insira um email válido");
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Por favor, insira um email válido',
+        position: 'top',
+      });
       return;
     }
 
@@ -49,18 +72,14 @@ export default function ForgotPassword() {
       //await new Promise((resolve) => setTimeout(resolve, 500));
       console.log("Resposta do backend:", response.data);
 
-      Alert.alert(
-        "Sucesso",
-        "Se este email estiver cadastrado, você receberá as instruções para redefinir sua senha.",
-        [{ text: "OK" }]
-      );
+      Toast.show({
+        type: 'success',
+        text1: 'Sucesso',
+        text2: 'Se este email estiver cadastrado, você receberá as instruções para redefinir sua senha.',
+        position: 'top',
+      });
     } catch (error: any) {
-      console.log("Erro ao enviar email:", error);
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Erro ao processar solicitação";
-      Alert.alert("Erro", String(message));
+      handleError(error, "Erro ao enviar instruções por email");
     } finally {
       setLoading(false);
     }
@@ -68,7 +87,12 @@ export default function ForgotPassword() {
 
   const handleResetPassword = async () => {
     if (!token.trim() || !password.trim()) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos corretamente.");
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Por favor, preencha todos os campos corretamente.',
+        position: 'top',
+      });
       return;
     }
 
@@ -83,16 +107,15 @@ export default function ForgotPassword() {
 
       console.log("Resposta do backend:", response.data);
 
-      Alert.alert("Sucesso", "Sua senha foi atualizada com sucesso!", [
-        { text: "OK", onPress: () => router.push("/login") },
-      ]);
+      Toast.show({
+        type: 'success',
+        text1: 'Sucesso',
+        text2: 'Sua senha foi atualizada com sucesso!',
+        position: 'top',
+      });
+      setTimeout(() => router.push("/login"), 1500);
     } catch (error: any) {
-      console.error("Erro ao resetar senha:", error);
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Erro ao processar solicitação";
-      console.error("Erro", String(message));
+      handleError(error, "Erro ao atualizar senha");
     } finally {
       setLoading(false);
     }
@@ -194,6 +217,7 @@ export default function ForgotPassword() {
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
+      <Toast />
     </SafeAreaView>
   );
 }
