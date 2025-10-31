@@ -31,12 +31,13 @@ export default function Register() {
   // Função padronizada para tratamento de erros
   const handleError = (error: any, defaultMessage: string) => {
     console.error("Erro:", error);
-    const message = error?.response?.data?.message || error?.message || defaultMessage;
+    const message =
+      error?.response?.data?.message || error?.message || defaultMessage;
     Toast.show({
-      type: 'error',
-      text1: 'Erro',
+      type: "error",
+      text1: "Erro",
       text2: String(message),
-      position: 'top',
+      position: "top",
     });
   };
 
@@ -48,20 +49,20 @@ export default function Register() {
       !formData.confirmPassword
     ) {
       Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: 'Por favor, preencha todos os campos',
-        position: 'top',
+        type: "error",
+        text1: "Erro",
+        text2: "Por favor, preencha todos os campos",
+        position: "top",
       });
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
       Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: 'As senhas não coincidem',
-        position: 'top',
+        type: "error",
+        text1: "Erro",
+        text2: "As senhas não coincidem",
+        position: "top",
       });
       return;
     }
@@ -80,10 +81,10 @@ export default function Register() {
 
       if (response.status === 201) {
         Toast.show({
-          type: 'success',
-          text1: 'Sucesso',
-          text2: 'Registro feito com sucesso!',
-          position: 'top',
+          type: "success",
+          text1: "Sucesso",
+          text2: "Registro feito com sucesso!",
+          position: "top",
         });
         setTimeout(() => handleBackToLogin(), 1500);
       }

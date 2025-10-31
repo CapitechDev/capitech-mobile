@@ -33,40 +33,41 @@ export default function Login() {
   // Função padronizada para tratamento de erros
   const handleError = (error: any, defaultMessage: string) => {
     console.error("Erro:", error);
-    const message = error?.response?.data?.message || error?.message || defaultMessage;
+    const message =
+      error?.response?.data?.message || error?.message || defaultMessage;
     Toast.show({
-      type: 'error',
-      text1: 'Erro',
+      type: "error",
+      text1: "Erro",
       text2: String(message),
-      position: 'top',
+      position: "top",
     });
   };
 
   const validateLoginForm = (email: string, password: string) => {
     if (!email || !password) {
       Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: 'Todos os campos são obrigatórios',
-        position: 'top',
+        type: "error",
+        text1: "Erro",
+        text2: "Todos os campos são obrigatórios",
+        position: "top",
       });
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(email)) {
       Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: 'E-mail inválido',
-        position: 'top',
+        type: "error",
+        text1: "Erro",
+        text2: "E-mail inválido",
+        position: "top",
       });
       return false;
     }
     if (password.length < 6) {
       Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: 'Senha deve ter pelo menos 6 caracteres',
-        position: 'top',
+        type: "error",
+        text1: "Erro",
+        text2: "Senha deve ter pelo menos 6 caracteres",
+        position: "top",
       });
       return false;
     }
@@ -97,26 +98,26 @@ export default function Login() {
           await login(token);
           console.log("🚀 Redirecionando para página principal...");
           Toast.show({
-            type: 'success',
-            text1: 'Sucesso',
-            text2: 'Login realizado com sucesso!',
-            position: 'top',
+            type: "success",
+            text1: "Sucesso",
+            text2: "Login realizado com sucesso!",
+            position: "top",
           });
           router.replace("/");
         } else {
           Toast.show({
-            type: 'error',
-            text1: 'Erro',
-            text2: 'Token não recebido do servidor',
-            position: 'top',
+            type: "error",
+            text1: "Erro",
+            text2: "Token não recebido do servidor",
+            position: "top",
           });
         }
       } else {
         Toast.show({
-          type: 'error',
-          text1: 'Erro',
+          type: "error",
+          text1: "Erro",
           text2: `Status inesperado: ${response.status}`,
-          position: 'top',
+          position: "top",
         });
       }
     } catch (error) {

@@ -32,32 +32,33 @@ export default function ForgotPassword() {
   // Função padronizada para tratamento de erros
   const handleError = (error: any, defaultMessage: string) => {
     console.error("Erro:", error);
-    const message = error?.response?.data?.message || error?.message || defaultMessage;
+    const message =
+      error?.response?.data?.message || error?.message || defaultMessage;
     Toast.show({
-      type: 'error',
-      text1: 'Erro',
+      type: "error",
+      text1: "Erro",
       text2: String(message),
-      position: 'top',
+      position: "top",
     });
   };
 
   const handleEmailPassword = async () => {
     if (!email) {
       Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: 'Por favor, digite seu email',
-        position: 'top',
+        type: "error",
+        text1: "Erro",
+        text2: "Por favor, digite seu email",
+        position: "top",
       });
       return;
     }
 
     if (!validateEmail(email)) {
       Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: 'Por favor, insira um email válido',
-        position: 'top',
+        type: "error",
+        text1: "Erro",
+        text2: "Por favor, insira um email válido",
+        position: "top",
       });
       return;
     }
@@ -73,10 +74,11 @@ export default function ForgotPassword() {
       console.log("Resposta do backend:", response.data);
 
       Toast.show({
-        type: 'success',
-        text1: 'Sucesso',
-        text2: 'Se este email estiver cadastrado, você receberá as instruções para redefinir sua senha.',
-        position: 'top',
+        type: "success",
+        text1: "Sucesso",
+        text2:
+          "Se este email estiver cadastrado, você receberá as instruções para redefinir sua senha.",
+        position: "top",
       });
     } catch (error: any) {
       handleError(error, "Erro ao enviar instruções por email");
@@ -88,10 +90,10 @@ export default function ForgotPassword() {
   const handleResetPassword = async () => {
     if (!token.trim() || !password.trim()) {
       Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: 'Por favor, preencha todos os campos corretamente.',
-        position: 'top',
+        type: "error",
+        text1: "Erro",
+        text2: "Por favor, preencha todos os campos corretamente.",
+        position: "top",
       });
       return;
     }
@@ -108,10 +110,10 @@ export default function ForgotPassword() {
       console.log("Resposta do backend:", response.data);
 
       Toast.show({
-        type: 'success',
-        text1: 'Sucesso',
-        text2: 'Sua senha foi atualizada com sucesso!',
-        position: 'top',
+        type: "success",
+        text1: "Sucesso",
+        text2: "Sua senha foi atualizada com sucesso!",
+        position: "top",
       });
       setTimeout(() => router.push("/login"), 1500);
     } catch (error: any) {
